@@ -2179,8 +2179,7 @@ body {
     }
     .mist .site-title i {
       background: #FFFFFFfe;
-    }
-.site-meta {
+    }.site-meta {
     padding: 0 10px;
 }
 .mist .post-button .btn:hover {
