@@ -2179,15 +2179,7 @@ body {
     }
     .mist .site-title i {
       background: #FFFFFFfe;
-    }.mist .sidebar {
-display: none;
-}
-.drawer-box {
-    display: none;
-}
-body{
-padding: 0 !important;
-}
+    }
 .site-meta {
     padding: 0 10px;
 }

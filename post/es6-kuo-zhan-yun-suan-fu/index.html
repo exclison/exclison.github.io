@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#495057">
 <title>es6扩展运算符 | Exclison</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1600500889495">
+<link rel="shortcut icon" href="/favicon.ico?v=1600657685036">
 <link rel="stylesheet" href="/media/css/mist.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -77,6 +77,8 @@
           
             
             
+              
+            
             <li class="nav-item ">
               
               
@@ -89,6 +91,8 @@
             </li>
           
             
+            
+              
             
             <li class="nav-item ">
               
@@ -103,6 +107,8 @@
           
             
             
+              
+            
             <li class="nav-item ">
               
               
@@ -116,6 +122,8 @@
           
             
             
+              
+            
             <li class="nav-item ">
               
               
@@ -127,6 +135,16 @@
               
             </li>
           
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-address-book"></i> 友情链接
+                  
+                </a>
+              </li>
+            
           
           
             <li id="fa_search" class="nav-item">
@@ -171,6 +189,243 @@
         
 
 <div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Exclison</p>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">4</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="">
+        <span class="site-item-stat-count">2</span>
+        <span class="site-item-stat-name language" data-lan="category">分类</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">2</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper auto-number auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li><a href="#%E8%AE%B0%E4%B8%80%E6%AC%A1es6%E6%89%A9%E5%B1%95%E8%BF%90%E7%AE%97%E7%AC%A6%E6%8A%A5%E9%94%99%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95">记一次es6扩展运算符报错的解决办法</a></li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
   
 </div>
 <script>
@@ -779,6 +1034,798 @@
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://exclison.github.io/post/webpack-pei-zhi-xiang-jie/"" data-c="
+          &lt;h2 id=&#34;webpack配置&#34;&gt;Webpack配置&lt;/h2&gt;
+&lt;p&gt;webpack 是需要传入一个配置对象(configuration object)。取决于你如何使用 webpack，可以通过两种方式之一：终端或 Node.js。下面指定了所有可用的配置选项。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;注意整个配置中我们使用 Node 内置的&lt;/em&gt; &lt;a href=&#34;https://nodejs.org/api/path.html&#34;&gt;path 模块&lt;/a&gt;&lt;em&gt;，并在它前面加上&lt;/em&gt; &lt;a href=&#34;https://nodejs.org/docs/latest/api/globals.html#globals_dirname&#34;&gt;__dirname&lt;/a&gt;&lt;em&gt;这个全局变量。可以防止不同操作系统之间的文件路径问题，并且可以使相对路径按照预期工作。&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;选项概述&#34;&gt;选项概述&lt;/h3&gt;
+&lt;p&gt;Web pack.config.js&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const path = require(&#39;path&#39;);
+
+module.exports = {
+  
+  // 选择模式告诉 Webpack 相应地使用其内置的优化。
+  mode: &amp;quot;production&amp;quot;, // &amp;quot;production&amp;quot; | &amp;quot;development&amp;quot; | &amp;quot;none&amp;quot;  
+
+  // 这里应用程序开始执行 webpack 开始打包
+  entry: &amp;quot;./app/entry&amp;quot;, // string | object | array  
+
+  output: {
+    // webpack 如何输出结果的相关选项
+    path: path.resolve(__dirname, &amp;quot;dist&amp;quot;), // string
+    // 所有输出文件的目标路径
+    // 必须是绝对路径（使用 Node.js 的 path 模块）
+
+    filename: &amp;quot;bundle.js&amp;quot;, // string    // 「入口分块(entry chunk)」的文件名模板（出口分块？）
+
+    publicPath: &amp;quot;/assets/&amp;quot;, // string    // 输出解析文件的目录，url 相对于 HTML 页面
+
+    library: &amp;quot;MyLibrary&amp;quot;, // string,
+    // 导出库(exported library)的名称
+
+    libraryTarget: &amp;quot;umd&amp;quot;, // 通用模块定义    // 导出库(exported library)的类型
+
+  module: {
+    // 关于模块配置
+
+    rules: [
+      // 模块规则（配置 loader、解析器等选项）
+
+      {
+        test: /\.jsx?$/,
+        include: [
+          path.resolve(__dirname, &amp;quot;app&amp;quot;)
+        ],
+        exclude: [
+          path.resolve(__dirname, &amp;quot;app/demo-files&amp;quot;)
+        ],
+        // 这里是匹配条件，每个选项都接收一个正则表达式或字符串
+        // test 和 include 具有相同的作用，都是必须匹配选项
+        // exclude 是必不匹配选项（优先于 test 和 include）
+        // 最佳实践：
+        // - 只在 test 和 文件名匹配 中使用正则表达式
+        // - 在 include 和 exclude 中使用绝对路径数组
+        // - 尽量避免 exclude，更倾向于使用 include
+
+        issuer: { test, include, exclude },
+        // issuer 条件（导入源）
+
+        enforce: &amp;quot;pre&amp;quot;,
+        enforce: &amp;quot;post&amp;quot;,
+        // 标识应用这些规则，即使规则覆盖（高级选项）
+
+        loader: &amp;quot;babel-loader&amp;quot;,
+        // 应该应用的 loader，它相对上下文解析
+        // 为了更清晰，`-loader` 后缀在 webpack 2 中不再是可选的
+        // 查看 webpack 1 升级指南。
+
+        options: {
+          presets: [&amp;quot;es2015&amp;quot;]
+        },
+        // loader 的可选项
+      },
+
+      {
+        test: /\.html$/,
+        test: &amp;quot;\.html$&amp;quot;
+
+        use: [
+          // 应用多个 loader 和选项
+          &amp;quot;htmllint-loader&amp;quot;,
+          {
+            loader: &amp;quot;html-loader&amp;quot;,
+            options: {
+              /* ... */
+            }
+          }
+        ]
+      },
+
+      { oneOf: [ /* rules */ ] },
+      // 只使用这些嵌套规则之一
+
+      { rules: [ /* rules */ ] },
+      // 使用所有这些嵌套规则（合并可用条件）
+
+      { resource: { and: [ /* 条件 */ ] } },
+      // 仅当所有条件都匹配时才匹配
+
+      { resource: { or: [ /* 条件 */ ] } },
+      { resource: [ /* 条件 */ ] },
+      // 任意条件匹配时匹配（默认为数组）
+
+      { resource: { not: /* 条件 */ } }
+      // 条件不匹配时匹配
+    ],
+
+    /* 高级模块配置（点击展示） */  },
+
+  resolve: {
+    // 解析模块请求的选项
+    // （不适用于对 loader 解析）
+
+    modules: [
+      &amp;quot;node_modules&amp;quot;,
+      path.resolve(__dirname, &amp;quot;app&amp;quot;)
+    ],
+    // 用于查找模块的目录
+
+    extensions: [&amp;quot;.js&amp;quot;, &amp;quot;.json&amp;quot;, &amp;quot;.jsx&amp;quot;, &amp;quot;.css&amp;quot;],
+    // 使用的扩展名
+
+    alias: {
+      // 模块别名列表
+      &amp;quot;module&amp;quot;: path.resolve(__dirname, &amp;quot;app/third/module.js&amp;quot;),
+      // 起别名 &amp;quot;module&amp;quot; -&amp;gt; &amp;quot;./app/third/module.js&amp;quot; 和 &amp;quot;module/file&amp;quot; 会导致错误
+      // 模块别名相对于当前上下文导入
+    },
+
+  performance: {
+    hints: &amp;quot;warning&amp;quot;, // 枚举    maxAssetSize: 200000, // 整数类型（以字节为单位）
+    maxEntrypointSize: 400000, // 整数类型（以字节为单位）
+    assetFilter: function(assetFilename) {
+      // 提供资源文件名的断言函数
+      return assetFilename.endsWith(&#39;.css&#39;) || assetFilename.endsWith(&#39;.js&#39;);
+    }
+  },
+
+  devtool: &amp;quot;source-map&amp;quot;, // enum  // 通过在浏览器调试工具(browser devtools)中添加元信息(meta info)增强调试
+  // 牺牲了构建速度的 `source-map&#39; 是最详细的。
+
+  context: __dirname, // string（绝对路径！）
+  // webpack 的主目录
+  // entry 和 module.rules.loader 选项
+  // 相对于此目录解析
+
+  target: &amp;quot;web&amp;quot;, // 枚举  // 包(bundle)应该运行的环境
+  // 更改 块加载行为(chunk loading behavior) 和 可用模块(available module)
+
+  externals: [&amp;quot;react&amp;quot;, /^@angular\//],  // 不要遵循/打包这些模块，而是在运行时从环境中请求他们
+
+  stats: &amp;quot;errors-only&amp;quot;,  // 精确控制要显示的 bundle 信息
+
+  devServer: {
+    proxy: { // 代理 URL 到后端开发服务器
+      &#39;/api&#39;: &#39;http://localhost:3000&#39;
+    },
+    contentBase: path.join(__dirname, &#39;public&#39;), // boolean | string | array, static file location
+    compress: true, // 启用 gzip 压缩
+    historyApiFallback: true, // 404 时索引. html 为 true，多个路径的对象为 true
+    hot: true, // 热模块替换。取决于热模块替换插件
+    https: false, // 为true 证书颁发的对象
+    noInfo: true, // 仅错误  热重新加载时警告
+    // ...
+  },
+
+  plugins: [
+    // 插件
+  ],
+  // 附加插件列表
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;多种配置类型&#34;&gt;多种配置类型&lt;/h3&gt;
+&lt;p&gt;除了导出单个配置对象，还有一些方式满足其他需求。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;导出为一个函数&lt;/p&gt;
+&lt;p&gt;最终，你会发现需要在&lt;a href=&#34;https://www.webpackjs.com/guides/development&#34;&gt;开发&lt;/a&gt;和&lt;a href=&#34;https://www.webpackjs.com/guides/production&#34;&gt;生产构建&lt;/a&gt;之间，消除 &lt;code&gt;webpack.config.js&lt;/code&gt; 的差异。（至少）有两种选项：&lt;/p&gt;
+&lt;p&gt;作为导出一个配置对象的替代，还有一种可选的导出方式是，从 webpack 配置文件中导出一个函数。该函数在调用时，可传入两个参数：&lt;/p&gt;
+&lt;p&gt;​	环境对象(environment)作为第一个参数。一个选项 map 对象（&lt;code&gt;argv&lt;/code&gt;）作为第二个参数。这个对象描述了传递给 webpack 的选项，并且具有 &lt;a href=&#34;https://www.webpackjs.com/api/cli/#output-options&#34;&gt;&lt;code&gt;output-filename&lt;/code&gt;&lt;/a&gt; 和 &lt;a href=&#34;https://www.webpackjs.com/api/cli/#optimize-options&#34;&gt;&lt;code&gt;optimize-minimize&lt;/code&gt;&lt;/a&gt; 等 key。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;
+module.exports = function(env, argv) {
+  return {
+    mode: env.production ? &#39;production&#39; : &#39;development&#39;,
+    devtool: env.production ? &#39;source-maps&#39; : &#39;eval&#39;,
+     plugins: [
+       new webpack.optimize.UglifyJsPlugin({
+        compress: argv[&#39;optimize-minimize&#39;] // 只有传入 -p 或 --optimize-minimize
+       })
+     ]
+  };
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;导出一个Promise&lt;/p&gt;
+&lt;p&gt;webpack 将运行由配置文件导出的函数，并且等待 Promise 返回。便于需要异步地加载所需的配置变量。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;module.exports = () =&amp;gt; {
+  return new Promise((resolve, reject) =&amp;gt; {
+    setTimeout(() =&amp;gt; {
+      resolve({
+        entry: &#39;./app.js&#39;,
+        /* ... */
+      })
+    }, 5000)
+  })
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;导出多个配置对象&lt;/p&gt;
+&lt;p&gt;作为导出一个配置对象/配置函数的替代，你可能需要导出多个配置对象（从 webpack 3.1.0 开始支持导出多个函数）。当运行 webpack 时，所有的配置对象都会构建。例如，导出多个配置对象，对于针对多个&lt;a href=&#34;https://www.webpackjs.com/configuration/output#output-librarytarget&#34;&gt;构建目标&lt;/a&gt;（例如 AMD 和 CommonJS）&lt;a href=&#34;https://www.webpackjs.com/guides/author-libraries&#34;&gt;打包一个 library&lt;/a&gt; 非常有用。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;module.exports = [{
+  output: {
+    filename: &#39;./dist-amd.js&#39;,
+    libraryTarget: &#39;amd&#39;
+  },
+  entry: &#39;./app.js&#39;,
+  mode: &#39;production&#39;,
+}, {
+  output: {
+    filename: &#39;./dist-commonjs.js&#39;,
+    libraryTarget: &#39;commonjs&#39;
+  },
+  entry: &#39;./app.js&#39;,
+  mode: &#39;production&#39;,
+}]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;入口和上下文&#34;&gt;入口和上下文&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;entry 对象是用于 webpack 查找启动并构建 bundle。其上下文是入口文件所处的目录的绝对路径的字符串。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;context&lt;/p&gt;
+&lt;p&gt;基础目录，&lt;strong&gt;绝对路径&lt;/strong&gt;，用于从配置中解析入口起点(entry point)和 loader&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;context: path.resolve(__dirname, &amp;quot;app&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;默认使用当前目录，但是推荐在配置中传递一个值。这使得你的配置独立于 CWD(current working directory - 当前执行路径)。 &lt;strong&gt;平时用不到&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;entry&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;string | [string] | object { &amp;lt;key&amp;gt;: string | [string] } | (function: () =&amp;gt; string | [string] | object { &amp;lt;key&amp;gt;: string | [string] })&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;起点或是应用程序的起点入口。从这个起点开始，应用程序启动执行。如果传递一个数组，那么数组的每一项都会执行。&lt;/p&gt;
+&lt;p&gt;动态加载的模块&lt;strong&gt;不是&lt;/strong&gt;入口起点。&lt;/p&gt;
+&lt;p&gt;简单规则：每个 HTML 页面都有一个入口起点。单页应用(SPA)：一个入口起点，多页应用(MPA)：多个入口起点。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;entry: {
+  home: &amp;quot;./home.js&amp;quot;,
+  about: &amp;quot;./about.js&amp;quot;,
+  contact: &amp;quot;./contact.js&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;命名&lt;/p&gt;
+&lt;p&gt;如果传入一个字符串或字符串数组，chunk 会被命名为 &lt;code&gt;main&lt;/code&gt;。如果传入一个对象，则每个键(key)会是 chunk 的名称，该值描述了 chunk 的入口起点。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;动态入口&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;entry: () =&amp;gt; &#39;./demo&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;或&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;entry: () =&amp;gt; new Promise((resolve) =&amp;gt; resolve([&#39;./demo&#39;, &#39;./demo2&#39;]))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;当结合 &lt;a href=&#34;https://www.webpackjs.com/configuration/output#output-library&#34;&gt;&lt;code&gt;output.library&lt;/code&gt;&lt;/a&gt; 选项时：如果传入数组，则只导出最后一项。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;输出&#34;&gt;输出&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;output&lt;/code&gt; 位于对象最顶级键(key)，包括了一组选项，指示 webpack 如何去输出、以及在哪里输出你的     「bundle、asset 和其他你所打包或使用 webpack 载入的任何内容」。&lt;/p&gt;
+&lt;h4 id=&#34;outputfilename&#34;&gt;&lt;code&gt;output.filename&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;string&lt;/code&gt; &lt;code&gt;function&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;此选项决定了每个输出 bundle 的名称。这些 bundle 将写入到 &lt;a href=&#34;https://www.webpackjs.com/configuration/output/#output-path&#34;&gt;&lt;code&gt;output.path&lt;/code&gt;&lt;/a&gt; 选项指定的目录下。&lt;/p&gt;
+&lt;p&gt;对于单个&lt;a href=&#34;https://www.webpackjs.com/configuration/entry-context#entry&#34;&gt;&lt;code&gt;入口&lt;/code&gt;&lt;/a&gt;起点，filename 会是一个静态名称。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;filename: &amp;quot;bundle.js&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;然而，当通过多个入口起点(entry point)、代码拆分(code splitting)或各种插件(plugin)创建多个 bundle，应该使用以下一种替换方式，来赋予每个 bundle 一个唯一的名称……&lt;/p&gt;
+&lt;p&gt;使用入口名称：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;filename: &amp;quot;[name].bundle.js&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;使用内部 chunk id&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;filename: &amp;quot;[id].bundle.js&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;使用每次构建过程中，唯一的 hash 生成&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;filename: &amp;quot;[name].[hash].bundle.js&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;使用基于每个 chunk 内容的 hash：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;filename: &amp;quot;[chunkhash].bundle.js&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;注意此选项被称为文件名，但是你还是可以使用像 &lt;code&gt;&amp;quot;js/[name]/bundle.js&amp;quot;&lt;/code&gt; 这样的文件夹结构。&lt;/p&gt;
+&lt;p&gt;注意，此选项不会影响那些「按需加载 chunk」的输出文件。对于这些文件，请使用 &lt;a href=&#34;https://www.webpackjs.com/configuration/output/#output-chunkfilename&#34;&gt;&lt;code&gt;output.chunkFilename&lt;/code&gt;&lt;/a&gt; 选项来控制输出。通过 loader 创建的文件也不受影响。在这种情况下，你必须尝试 loader 特定的可用选项。&lt;/p&gt;
+&lt;p&gt;可以使用以下替换模板字符串（通过 webpack 内部的[&lt;code&gt;TemplatedPathPlugin&lt;/code&gt;]&lt;a href=&#34;https://github.com/webpack/webpack/blob/master/lib/TemplatedPathPlugin.js&#34;&gt;&lt;code&gt;TemplatedPathPlugin&lt;/code&gt;&lt;/a&gt;）：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;模板&lt;/th&gt;
+&lt;th&gt;描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;[hash]&lt;/td&gt;
+&lt;td&gt;模块标识符的hash&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[chunkhash]&lt;/td&gt;
+&lt;td&gt;chunk内容的hash&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[name]&lt;/td&gt;
+&lt;td&gt;模块名称&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[id]&lt;/td&gt;
+&lt;td&gt;模块标识符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[query]&lt;/td&gt;
+&lt;td&gt;模块的query,例如,文件名&lt;code&gt;?&lt;/code&gt;后面的字符串&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;[hash]&lt;/code&gt; 和 &lt;code&gt;[chunkhash]&lt;/code&gt; 的长度可以使用 &lt;code&gt;[hash:16]&lt;/code&gt;（默认为20）来指定。或者，通过指定&lt;a href=&#34;https://www.webpackjs.com/configuration/output/#output-hashdigestlength&#34;&gt;&lt;code&gt;output.hashDigestLength&lt;/code&gt;&lt;/a&gt; 在全局配置长度。&lt;/p&gt;
+&lt;h4 id=&#34;outputpath&#34;&gt;&lt;code&gt;output.path&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;output目录对应一个绝对路径&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;path:path.reslove(__dirname,&#39;dist/assets&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;注意，&lt;code&gt;[hash]&lt;/code&gt; 在参数中被替换为编译过程(compilation)的 hash。&lt;/p&gt;
+&lt;h4 id=&#34;outputpublicpath&#34;&gt;&lt;code&gt;output.publicPath&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;string&lt;/code&gt; &lt;code&gt;function&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;对于按需加载(on-demand-load)或加载外部资源(external resources)（如图片、文件等）来说，output.publicPath 是很重要的选项。如果指定了一个错误的值，则在加载这些资源时会收到 404 错误。&lt;/p&gt;
+&lt;p&gt;此选项指定在浏览器中所引用的「此输出目录对应的&lt;strong&gt;公开 URL&lt;/strong&gt;」。相对 URL(relative URL) 会被相对于 HTML 页面（或 `` 标签）解析。相对于服务的 URL(Server-relative URL)，相对于协议的 URL(protocol-relative URL) 或绝对 URL(absolute URL) 也可是可能用到的，或者有时必须用到，例如：当将资源托管到 CDN 时。&lt;/p&gt;
+&lt;p&gt;该选项的值是以 runtime(运行时) 或 loader(载入时) 所创建的每个 URL 为前缀。因此，在多数情况下，&lt;strong&gt;此选项的值都会以&lt;code&gt;/&lt;/code&gt;结束&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;默认值是一个空字符串 &lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;简单规则如下：&lt;a href=&#34;https://www.webpackjs.com/configuration/output/#output-path&#34;&gt;&lt;code&gt;output.path&lt;/code&gt;&lt;/a&gt; 中的 URL 以 HTML 页面为基准。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;path: path.resolve(__dirname, &amp;quot;public/assets&amp;quot;),
+publicPath: &amp;quot;https://cdn.example.com/assets/&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;optimization&#34;&gt;Optimization&lt;/h3&gt;
+&lt;p&gt;由于版本 4 Webpack 会根据所选模式运行优化，因此所有优化仍可用于手动配置和覆盖。&lt;/p&gt;
+&lt;h4 id=&#34;optimizationminimize&#34;&gt;&lt;code&gt;optimization.minimize&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean = true&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;告诉 Webpack 使用 TerserPlugin 或优化中指定的插件最小化捆绑包。&lt;/p&gt;
+&lt;p&gt;Webpack.config.js&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;module.exports = {
+  //...
+  optimization: {
+    minimize: false
+  }
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;optimizationminimizer&#34;&gt;&lt;code&gt;optimization.minimizer&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;[TerserPlugin]&lt;/code&gt;或者&lt;code&gt;[function (compiler)]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;允许您通过提供不同的一个或多个自定义 TerserPlugin 实例来覆盖默认最小化器。&lt;/p&gt;
+&lt;p&gt;Webpack.config.js&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const TerserPlugin = require(&#39;terser-webpack-plugin&#39;);
+
+module.exports = {
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true, // 如果在生产中使用源映射，则必须设置为 true
+        terserOptions: {
+          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+        }
+      }),
+    ],
+  }
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;或者传入函数&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;module.exports = {
+  optimization: {
+    minimizer: [
+      (compiler) =&amp;gt; {
+        const TerserPlugin = require(&#39;terser-webpack-plugin&#39;);
+        new TerserPlugin({ /* your config */ }).apply(compiler);
+      }
+    ],
+  }
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&#39;...&#39;可用于优化. 最小化器访问默认值。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;module.exports = {
+  optimization: {
+    minimizer: [new CssMinimizer(), &#39;...&#39;],
+  }
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;optimizationsplitchunks&#34;&gt;&lt;code&gt;optimization.splitChunks&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;object&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;默认情况下，Webpack v4+ 为动态导入的模块提供了开箱即用的新的常见区块策略。请参阅在 SplitChunksPlugin 页中配置此行为的可用选项。&lt;/p&gt;
+&lt;p&gt;Webpack.config.js&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;module.exports = {
+  //...
+  optimization: {
+    splitChunks: {
+      
+      //这指示将选择哪些区块进行优化。提供字符串时，有效值为all、async和initial。
+      //提供所有块可能特别强大，因为这意味着块即使在异步块和非异步块之间也可以共享。
+      chunks: &#39;async&#39;,
+      
+
+      minSize: 20000,//要生成区块的最小大小（以字节为单位）
+
+      //拆分Chunks.minRemainsize 选项在webpack 5中引入，
+      //通过确保拆分后保留的区块的最小大小超过限制来避免零大小的模块。
+      //在&amp;quot;开发&amp;quot;模式下默认为 0。
+      //对于其他情况，拆分为&amp;quot;拆分&amp;quot;.minRemainsize 默认为 splitChunks.minSize 的值，
+      //因此不需要手动指定，但需要深度控制的极少数情况除外
+      minRemainingSize: 0,
+      
+      //使用 maxSize告诉 Webpack 尝试将大于 maxSize 字节的区块拆分为较小的部分。
+      //零件的大小至少为最小尺寸（最大尺寸旁边）。
+			//maxSize 选项用于 HTTP/2 和长期缓存。它增加了请求计数，以便更好地缓存。
+      //它还可用于减小文件大小，以便更快地重建。
+      maxSize: 0,
+      
+      minChunks: 1,//拆分前必须共享模块的最小区块数。
+
+      maxAsyncRequests: 30,//按需加载时并行请求的最大数量。
+
+      maxInitialRequests: 30,//入口点上并行请求的最大数。
+      
+      //默认情况下，Webpack 将使用区块的源和名称（例如供应商main.js）生成名称。
+      //此选项允许您指定用于生成名称的分隔符。
+      automaticNameDelimiter: &#39;~&#39;,
+     
+      //强制执行拆分的大小阈值和其他限制（最小保持大小、最大同步请求、最大初始请求）将被忽略
+      enforceSizeThreshold: 50000,
+
+
+      //缓存组可以继承和/或覆盖拆分Chunks中的任何选项。
+      //但测试、优先级和重用只可以在缓存组级别进行配置。若要禁用任何默认缓存组，请将它们设置为 false。
+      cacheGroups: {
+        defaultVendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10
+        },
+        default: {
+          minChunks: 2,
+          
+          //一个模块可以属于多个缓存组。优化将更喜欢具有更高优先级的缓存组。
+          //默认组具有负优先级，允许自定义组具有更高的优先级（自定义组默认值为 0）。
+          priority: -20,
+          
+          //如果当前区块包含已经从主捆绑包中分离出的模块，则将重用该区块，
+          //而不是生成新的区块。这可能会影响区块的结果文件名。
+          reuseExistingChunk: true 
+
+        }
+      }
+    }
+  }
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;开发中devserver&#34;&gt;开发中(devServer)&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;object&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;通过来自 &lt;a href=&#34;https://github.com/webpack/webpack-dev-server&#34;&gt;webpack-dev-server&lt;/a&gt; 的这些选项，能够用多种方式改变其行为。这里有一个简单的例子，所有来自 &lt;code&gt;dist/&lt;/code&gt; 目录的文件都做 gzip 压缩和提供为服务：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;devServer: {
+  contentBase: path.join(__dirname, &amp;quot;dist&amp;quot;),
+  compress: true,
+  port: 9000
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;通过 Node.js API 来使用 dev-server， &lt;code&gt;devServer&lt;/code&gt; 中的选项将被忽略。将选项作为第二个参数传入： &lt;code&gt;new WebpackDevServer(compiler, {...})&lt;/code&gt;。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Webpack = require(&#39;webpack&#39;);
+const WebpackDevServer = require(&#39;../../../lib/Server&#39;);
+const webpackConfig = require(&#39;./webpack.config&#39;);
+
+const compiler = Webpack(webpackConfig);
+const devServerOptions = Object.assign({}, webpackConfig.devServer, {
+  open: true,
+  stats: {
+    colors: true,
+  },
+});
+const server = new WebpackDevServer(compiler, devServerOptions);
+
+server.listen(8080, &#39;127.0.0.1&#39;, () =&amp;gt; {
+  console.log(&#39;Starting server on http://localhost:8080&#39;);
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverafter&#34;&gt;&lt;code&gt;devServer.after&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;function&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;提供在服务器内部所有其他中间件之后执行自定义中间件的能力。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;after(app){
+  // do fancy stuff
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverallowedhosts&#34;&gt;&lt;code&gt;devServer.allowedHosts&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;array&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;此选项允许您将允许访问开发服务器的服务列入白名单。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;allowedHosts: [
+  &#39;host.com&#39;,
+  &#39;subdomain.host.com&#39;,
+  &#39;subdomain2.host.com&#39;,
+  &#39;host2.com&#39;
+]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;模仿 django 的&lt;code&gt;ALLOWED_HOSTS&lt;/code&gt;，一个以&lt;code&gt;.&lt;/code&gt;开头的值。可用作子域通配符。.host.com将匹配&lt;code&gt;host.com&lt;/code&gt; &lt;code&gt;www.host.com&lt;/code&gt;和任何其他子域&lt;code&gt;host.com&lt;/code&gt;。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;// 这达到相同的效果，因为第一个示例
+// 不必更新您的配置
+// 如果新的子域需要访问开发服务器
+allowedHosts: [
+    &#39;.host.com&#39;,
+    &#39;host2.com&#39;
+]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;若要在 CLI 中使用此选项，请传递 --允许的主机选项逗号分隔字符串。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;webpack-dev-server --entry /entry/file --output-path /output/path --allowed-hosts .host.com,host2.com
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverbefore&#34;&gt;&lt;code&gt;devServer.before&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;function&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;提供在服务器内部执行所有其他中间件之前执行自定义中间件的能力。这可用于定义自定义处理程序，例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;before(app){
+  app.get(&#39;/some/path&#39;, function(req, res) {
+    res.json({ custom: &#39;response&#39; });
+  });
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverbonjour&#34;&gt;&lt;code&gt;devServer.bonjour&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;此选项在启动时通过 ZeroConf 网络广播服务器&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;bonjour: true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverclientloglevel&#34;&gt;&lt;code&gt;devServer.clientLogLevel&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;控制消息显示&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;当使用*内联模式(inline mode)*时，在开发工具(DevTools)的控制台(console)将显示消息，如：在重新加载之前，在一个错误之前，或者模块热替换(Hot Module Replacement)启用时。这可能显得很繁琐。&lt;/p&gt;
+&lt;p&gt;你可以阻止所有这些消息显示，使用这个选项：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;clientLogLevel: &amp;quot;none&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;可能的值有 &lt;code&gt;none&lt;/code&gt;, &lt;code&gt;error&lt;/code&gt;, &lt;code&gt;warning&lt;/code&gt; 或者 &lt;code&gt;info&lt;/code&gt;（默认值）。&lt;/p&gt;
+&lt;h4 id=&#34;devservercolor-cli-only&#34;&gt;&lt;code&gt;devServer.color&lt;/code&gt; - Cli only&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;启用/禁用控制台上的颜色。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;webpack-dev-server --color
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devservercompress&#34;&gt;&lt;code&gt;devServer.compress&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;启用gzip压缩&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;compress:true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devservercontentbase&#34;&gt;&lt;code&gt;devServer.contentBase&lt;/code&gt;&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;boolean` `string` `array
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;告诉服务器从哪里提供内容。只有在你想要提供静态文件时才需要。&lt;a href=&#34;https://www.webpackjs.com/configuration/dev-server/#devserver-publicpath-&#34;&gt;&lt;code&gt;devServer.publicPath&lt;/code&gt;&lt;/a&gt; 将用于确定应该从哪里提供 bundle，并且此选项优先。&lt;/p&gt;
+&lt;p&gt;默认情况下，将使用当前工作目录作为提供内容的目录，但是你可以修改为其他目录：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;contentBase: path.join(__dirname, &amp;quot;public&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;注意，推荐使用绝对路径。&lt;/p&gt;
+&lt;p&gt;但是也可以从多个目录提供内容：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;contentBase: [path.join(__dirname, &amp;quot;public&amp;quot;), path.join(__dirname, &amp;quot;assets&amp;quot;)]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;禁用 &lt;code&gt;contentBase&lt;/code&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;contentBase: false
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverfilename&#34;&gt;&lt;code&gt;devServer.filename&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;在&lt;strong&gt;惰性模式&lt;/strong&gt;中，此选项可减少编译。 默认在&lt;strong&gt;惰性模式&lt;/strong&gt;，每个请求结果都会产生全新的编译。使用 &lt;code&gt;filename&lt;/code&gt;，可以只在某个文件被请求时编译。&lt;/p&gt;
+&lt;p&gt;如果 &lt;code&gt;output.filename&lt;/code&gt; 设置为 &lt;code&gt;bundle.js&lt;/code&gt; ，&lt;code&gt;filename&lt;/code&gt; 使用如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;lazy: true,
+filename: &amp;quot;bundle.js&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;现在只有在请求 &lt;code&gt;/bundle.js&lt;/code&gt; 时候，才会编译 bundle。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;filename&lt;/code&gt; &lt;em&gt;在不使用&lt;/em&gt;**惰性加载***时没有效果。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;devserverheaders&#34;&gt;&lt;code&gt;devServer.headers&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;object&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;在所有响应中添加首部内容：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;headers: {
+  &amp;quot;X-Custom-Foo&amp;quot;: &amp;quot;bar&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverhistoryapifallback&#34;&gt;&lt;code&gt;devServer.historyApiFallback&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt; &lt;code&gt;object&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;当使用 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/History&#34;&gt;HTML5 History API&lt;/a&gt; 时，任意的 &lt;code&gt;404&lt;/code&gt; 响应都可能需要被替代为 &lt;code&gt;index.html&lt;/code&gt;。通过传入以下启用：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;historyApiFallback: true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;通过传入一个对象，比如使用 &lt;code&gt;rewrites&lt;/code&gt; 这个选项，此行为可进一步地控制：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;historyApiFallback: {
+  rewrites: [
+    { from: /^\/$/, to: &#39;/views/landing.html&#39; },
+    { from: /^\/subpage/, to: &#39;/views/subpage.html&#39; },
+    { from: /./, to: &#39;/views/404.html&#39; }
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;当路径中使用点(dot)（常见于 Angular），你可能需要使用 &lt;code&gt;disableDotRule&lt;/code&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;historyApiFallback: {
+  disableDotRule: true
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverhost&#34;&gt;&lt;code&gt;devServer.host&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;指定使用一个 host。默认是 &lt;code&gt;localhost&lt;/code&gt;。如果你希望服务器外部可访问，指定如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;host: &amp;quot;0.0.0.0&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverhot&#34;&gt;&lt;code&gt;devServer.hot&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;启用 webpack 的模块热替换特性：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;hot:true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;请注意，Webpack。需要热模块更换模块才能完全启用 HMR。如果使用 --hot 选项启动 Webpack 或 Webpack-dev-server，则会自动添加此插件，因此您可能不需要将其添加到 Webpack.config.js 中。有关详细信息，请参阅 HMR 概念页面。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;devserverhotonly&#34;&gt;&lt;code&gt;devServer.hotOnly&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;启用热模块替换（请参阅 devServer.hot），在生成失败时不刷新页面作为回退。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;hotOnly: true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverhttps&#34;&gt;&lt;code&gt;devServer.https&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt; 	&lt;code&gt;object&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;默认情况下，dev-server 通过 HTTP 提供服务。也可以选择带有 HTTPS 的 HTTP/2 提供服务：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;https:true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;以上设置使用了自签名证书，但是你可以提供自己的：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;https: {
+  key: fs.readFileSync(&amp;quot;/path/to/server.key&amp;quot;),
+  cert: fs.readFileSync(&amp;quot;/path/to/server.crt&amp;quot;),
+  ca: fs.readFileSync(&amp;quot;/path/to/ca.pem&amp;quot;),
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;此对象直接传递到 Node.js HTTPS 模块，所以更多信息请查看 &lt;a href=&#34;https://nodejs.org/api/https.html&#34;&gt;HTTPS 文档&lt;/a&gt;。&lt;/p&gt;
+&lt;h4 id=&#34;devserverindex&#34;&gt;&lt;code&gt;devServer.index&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;被视为索引文件的文件名。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;index: &#39;index.htm&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverinfo-cli-only&#34;&gt;&lt;code&gt;devServer.info&lt;/code&gt; - CLI only&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;输出 cli 信息。默认情况下，它处于启用状态。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;webpack-dev-server --info=false
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverinline&#34;&gt;&lt;code&gt;devServer.inline&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;在 dev-server 的两种不同模式之间切换。默认情况下，应用程序启用&lt;em&gt;内联模式(inline mode)&lt;/em&gt;。这意味着一段处理实时重载的脚本被插入到你的包(bundle)中，并且构建消息将会出现在浏览器控制台。&lt;/p&gt;
+&lt;p&gt;也可以使用 &lt;strong&gt;iframe 模式&lt;/strong&gt;，它在通知栏下面使用 `` 标签，包含了关于构建的消息。切换到 &lt;strong&gt;iframe 模式&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;inline:false
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;推荐使用模块热替换的内联模式，因为它包含来自 websocket 的 HMR 触发器。轮询模式可以作为替代方案，但需要一个额外的入口点：&lt;/em&gt;&lt;code&gt;&#39;webpack/hot/poll?1000&#39;&lt;/code&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;devserverlazy&#34;&gt;&lt;code&gt;devServer.lazy&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;当启用 &lt;code&gt;lazy&lt;/code&gt; 时，dev-server 只有在请求时才编译包(bundle)。这意味着 webpack 不会监视任何文件改动。我们称之为“&lt;strong&gt;惰性模式&lt;/strong&gt;”。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;lazy:true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;watchOptions&lt;/code&gt; &lt;em&gt;在使用&lt;/em&gt;&lt;strong&gt;惰性模式&lt;/strong&gt;时无效。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;如果使用命令行工具(CLI)，请确保&lt;/em&gt;**内联模式(inline mode)**被禁用。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;devservernoinfo&#34;&gt;&lt;code&gt;devServer.noInfo&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;启用 &lt;code&gt;noInfo&lt;/code&gt; 后，诸如「启动时和每次保存之后，那些显示的 webpack 包(bundle)信息」的消息将被隐藏。错误和警告仍然会显示。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;noInfo:true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserveropen&#34;&gt;&lt;code&gt;devServer.open&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;启用&amp;quot;open&amp;quot;后，开发服务器将打开浏览器。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;open: true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserveropenpage&#34;&gt;&lt;code&gt;devServer.openPage&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;指定打开浏览器时要导航到的页面。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;openPage: &#39;/different/page&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserveroverlay&#34;&gt;&lt;code&gt;devServer.overlay&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt; &lt;code&gt;object&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;当存在编译器错误或警告时，在浏览器中显示全屏叠加。默认情况下禁用。如果只想显示编译器错误：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;overlay: true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果你想既显示错误也显示警告&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;overlay: {
+  warnings: true,
+  errors: true
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverport&#34;&gt;&lt;code&gt;devServer.port&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;指定要监听请求的端口号:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;port:8080
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverproxy&#34;&gt;&lt;code&gt;devServer.proxy&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;object&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;代理服务器&lt;/p&gt;
+&lt;p&gt;如果你有单独的后端开发服务器 API，并且希望在同域名下发送 API 请求 ，那么代理某些 URL 会很有用。&lt;/p&gt;
+&lt;p&gt;dev-server 使用了非常强大的 &lt;a href=&#34;https://github.com/chimurai/http-proxy-middleware&#34;&gt;http-proxy-middleware&lt;/a&gt; 包。更多高级用法，请查阅其&lt;a href=&#34;https://github.com/chimurai/http-proxy-middleware#options&#34;&gt;文档&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;localhost:3000&lt;/code&gt; 上有后端服务的话，你可以这样启用代理：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;proxy: {
+  &amp;quot;/api&amp;quot;: &amp;quot;http://localhost:3000&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;请求到 &lt;code&gt;/api/users&lt;/code&gt; 现在会被代理到请求 &lt;code&gt;http://localhost:3000/api/users&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;如果你不想始终传递 &lt;code&gt;/api&lt;/code&gt; ，则需要重写路径：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;proxy: {
+  &amp;quot;/api&amp;quot;: {
+    target: &amp;quot;http://localhost:3000&amp;quot;,
+    pathRewrite: {&amp;quot;^/api&amp;quot; : &amp;quot;&amp;quot;}
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;默认情况下，不接受运行在 HTTPS 上，且使用了无效证书的后端服务器。如果你想要接受，修改配置如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;proxy: {
+  &amp;quot;/api&amp;quot;: {
+    target: &amp;quot;https://other-server.example.com&amp;quot;,
+    secure: false
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;有时你不想代理所有的请求。可以基于一个函数的返回值绕过代理。&lt;/p&gt;
+&lt;p&gt;在函数中你可以访问请求体、响应体和代理选项。必须返回 &lt;code&gt;false&lt;/code&gt; 或路径，来跳过代理请求。&lt;/p&gt;
+&lt;p&gt;例如：对于浏览器请求，你想要提供一个 HTML 页面，但是对于 API 请求则保持代理。你可以这样做：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;proxy: {
+  &amp;quot;/api&amp;quot;: {
+    target: &amp;quot;http://localhost:3000&amp;quot;,
+    bypass: function(req, res, proxyOptions) {
+      if (req.headers.accept.indexOf(&amp;quot;html&amp;quot;) !== -1) {
+        console.log(&amp;quot;Skipping proxy for browser request.&amp;quot;);
+        return &amp;quot;/index.html&amp;quot;;
+      }
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果要将多个特定路径代理到同一目标，可以使用具有上下文属性的一个或多个对象的数组：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;proxy: [{
+  context: [&amp;quot;/auth&amp;quot;, &amp;quot;/api&amp;quot;],
+  target: &amp;quot;http://localhost:3000&amp;quot;,
+}]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverprogress-cli-only&#34;&gt;&lt;code&gt;devServer.progress&lt;/code&gt; - Cli only&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;将运行进度输出到控制台。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;webpack-dev-server --progress
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverpublic&#34;&gt;&lt;code&gt;devServer.public&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;当使用*内联模式(inline mode)*并代理 dev-server 时，内联的客户端脚本并不总是知道要连接到什么地方。它会尝试根据 &lt;code&gt;window.location&lt;/code&gt; 来猜测服务器的 URL，但是如果失败，你需要这样。&lt;/p&gt;
+&lt;p&gt;例如，dev-server 被代理到 nginx，并且在 &lt;code&gt;myapp.test&lt;/code&gt; 上可用：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;public: &amp;quot;myapp.test:80&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverpublicpath&#34;&gt;&lt;code&gt;devServer.publicPath&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;此路径下的打包文件可在浏览器中访问。&lt;/p&gt;
+&lt;p&gt;假设服务器运行在 &lt;code&gt;http://localhost:8080&lt;/code&gt; 并且 &lt;code&gt;output.filename&lt;/code&gt; 被设置为 &lt;code&gt;bundle.js&lt;/code&gt;。默认 &lt;code&gt;publicPath&lt;/code&gt; 是 &lt;code&gt;&amp;quot;/&amp;quot;&lt;/code&gt;，所以你的包(bundle)可以通过 &lt;code&gt;http://localhost:8080/bundle.js&lt;/code&gt; 访问。&lt;/p&gt;
+&lt;p&gt;可以修改 &lt;code&gt;publicPath&lt;/code&gt;，将 bundle 放在一个目录：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;publicPath: &amp;quot;/assets/&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;你的包现在可以通过 &lt;code&gt;http://localhost:8080/assets/bundle.js&lt;/code&gt; 访问。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;确保&lt;/em&gt; &lt;code&gt;publicPath&lt;/code&gt; &lt;em&gt;总是以斜杠(/)开头和结尾。&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;也可以使用一个完整的 URL。这是模块热替换所必需的。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;publicPath: &amp;quot;http://localhost:8080/assets/&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;bundle 可以通过 &lt;code&gt;http://localhost:8080/assets/bundle.js&lt;/code&gt; 访问。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;devServer.publicPath&lt;/code&gt; &lt;em&gt;和&lt;/em&gt; &lt;code&gt;output.publicPath&lt;/code&gt; &lt;em&gt;一样被推荐。&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;devserverquiet&#34;&gt;&lt;code&gt;devServer.quiet&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;启用 &lt;code&gt;quiet&lt;/code&gt; 后，除了初始启动信息之外的任何内容都不会被打印到控制台。这也意味着来自 webpack 的错误或警告在控制台不可见。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;quiet:true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserversocket&#34;&gt;&lt;code&gt;devServer.socket&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;要侦听的 Unix 套接字（而不是主机）。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;socket: &#39;socket&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverstaticoptions&#34;&gt;&lt;code&gt;devServer.staticOptions&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;可以配置高级选项，用于从内容库提供静态文件。有关可能的选项，请参阅快速文档。例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;staticOptions: {
+  redirect: false
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;devserverstats&#34;&gt;&lt;code&gt;devServer.stats&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;此选项允许您精确控制显示的捆绑信息。如果您想要一些捆绑信息，但并不是所有的，这可能是一个不错的中间地带。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;stats: &amp;quot;errors-only&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+">Webpack配置详解</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://exclison.github.io/post/webpack-shi-yong/"" data-c="
