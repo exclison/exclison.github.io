@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://exclison.github.io</id>
     <title>Exclison</title>
-    <updated>2020-09-21T03:25:10.527Z</updated>
+    <updated>2020-09-21T09:32:04.240Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://exclison.github.io"/>
     <link rel="self" href="https://exclison.github.io/atom.xml"/>
@@ -10,6 +10,20 @@
     <logo>https://exclison.github.io/images/avatar.png</logo>
     <icon>https://exclison.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Exclison</rights>
+    <entry>
+        <title type="html"><![CDATA[Webpack-plugins笔记]]></title>
+        <id>https://exclison.github.io/post/webpack-plugins-bi-ji/</id>
+        <link href="https://exclison.github.io/post/webpack-plugins-bi-ji/">
+        </link>
+        <updated>2020-09-21T09:31:19.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[webpack-loaders笔记]]></title>
+        <id>https://exclison.github.io/post/webpack-loaders-bi-ji/</id>
+        <link href="https://exclison.github.io/post/webpack-loaders-bi-ji/">
+        </link>
+        <updated>2020-09-21T07:34:33.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Webpack配置详解]]></title>
         <id>https://exclison.github.io/post/webpack-pei-zhi-xiang-jie/</id>

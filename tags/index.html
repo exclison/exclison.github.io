@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#495057">
 <title>Exclison</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1600658691005">
+<link rel="shortcut icon" href="/favicon.ico?v=1600680720265">
 <link rel="stylesheet" href="/media/css/mist.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -196,7 +196,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">4</span>
+        <span class="site-item-stat-count">6</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -249,6 +249,14 @@
             
       
         
+          
+            
+      
+        
+          
+            
+      
+        
       
         
       
@@ -258,9 +266,17 @@
           
         
       
-      <a class="cloud-tag" href="https://exclison.github.io/tag/Hme9RD3hK/" rel="1">webpack</a>
+      <a class="cloud-tag" href="https://exclison.github.io/tag/Hme9RD3hK/" rel="3">webpack</a>
     
       
+      
+        
+          
+        
+      
+        
+          
+        
       
         
           
@@ -538,6 +554,531 @@
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://exclison.github.io/post/webpack-plugins-bi-ji/"" data-c="
+          &lt;h2 id=&#34;plugins&#34;&gt;Plugins&lt;/h2&gt;
+&lt;p&gt;webpack 有着丰富的插件接口(rich plugin interface)。webpack 自身的多数功能都使用这个插件接口。这个插件接口使 webpack 变得&lt;strong&gt;极其灵活&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;htmlwebpackplugin&#34;&gt;HtmlWebpackPlugin&lt;/h3&gt;
+&lt;p&gt;简单创建 HTML 文件，用于服务器访问&lt;/p&gt;
+&lt;h4 id=&#34;安装&#34;&gt;&lt;strong&gt;安装&lt;/strong&gt;&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt; npm i --save-dev html-webpack-plugin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt; yarn add --dev html-webpack-plugin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这是一个 Webpack 插件，它简化了 HTML 文件的创建，可为 Webpack 捆绑包服务。这对于在文件名中包含哈希的 Webpack 捆绑包特别有用，该哈希值更改了每次编译。您可以让插件生成 HTML 文件，使用 lodash 模板提供您自己的模板或使用您自己的加载器。&lt;/p&gt;
+&lt;h4 id=&#34;使用&#34;&gt;&lt;strong&gt;使用&lt;/strong&gt;&lt;/h4&gt;
+&lt;p&gt;该插件将生成一个 HTML5 文件，该文件包含使用脚本标记在正文中的所有 Webpack 捆绑包。只需将插件添加到 Webpack 配置，如下所示：&lt;/p&gt;
+&lt;p&gt;Webpack.config.js&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const HtmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;)
+
+module.exports = {
+  entry: &#39;index.js&#39;,
+  output: {
+    path: __dirname + &#39;/dist&#39;,
+    filename: &#39;index_bundle.js&#39;
+  },
+  plugins: [
+    new HtmlWebpackPlugin()
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这将生成包含以下内容dist/index.html文件&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+    &amp;lt;title&amp;gt;Webpack App&amp;lt;/title&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;script src=&amp;quot;index_bundle.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果您有多个 Webpack 入口点，则它们都将包含在生成的 HTML 中的脚本标记中。&lt;/p&gt;
+&lt;p&gt;如果您在 Webpack 的输出中具有任何 CSS 资产（例如，使用迷你 css 提取插件提取的 CSS），则这些资产将包含在 HTML 头的 &lt;link&gt; 标记中。&lt;/p&gt;
+&lt;p&gt;如果你有插件使用它，html-Webpack-插件应先订购之前，任何集成插件。&lt;/p&gt;
+&lt;h4 id=&#34;options&#34;&gt;Options&lt;/h4&gt;
+&lt;p&gt;您可以将配置选项的哈希传递给 html-Webpack-plugin。允许的值如下所示&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Name&lt;/th&gt;
+&lt;th&gt;Type&lt;/th&gt;
+&lt;th&gt;Default&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;title&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{String}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Webpack App&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;用于生成的 HTML 文档的标题&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;filename&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{String}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;&#39;index.html&#39;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;要将 HTML 写入的文件。默认值为&amp;quot;index.html&amp;quot;。您也可以在此处指定子目录（例如：&amp;quot;assets/admin.html&amp;quot;）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;template&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{String}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;``&lt;/td&gt;
+&lt;td&gt;模板的相对路径或绝对路径。默认情况下，如果存在，它将使用&amp;quot;src/index.ejs&amp;quot;。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;templateContent&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{string|Function|false}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;false&lt;/td&gt;
+&lt;td&gt;可以使用代替&amp;quot;模板&amp;quot;来提供内联模板&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;templateParameters&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{Boolean|Object|Function}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;false&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;允许覆盖模板中使用的参数&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;inject&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{Boolean|String}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;true || &#39;head&#39; || &#39;body&#39; || false&lt;/code&gt; 将所有资源注入给定的&amp;quot;template&amp;quot;或&amp;quot;templateContent&amp;quot;。传递&amp;quot;true&amp;quot;或&amp;quot;body&amp;quot;时，所有 javascript 资源都将放置在正文元素的底部。&amp;quot;head&amp;quot;将脚本放在头部元素中&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;scriptLoading&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{&#39;blocking&#39;|&#39;defer&#39;}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;&#39;blocking&#39;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;现代浏览器支持非阻塞 javascript 加载（&amp;quot;defer&amp;quot;）以提高页面启动性能。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;favicon&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{String}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;``&lt;/td&gt;
+&lt;td&gt;将给定的 favicon 路径添加到输出 HTML&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;meta&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{Object}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;允许注入meta标记.例如:&lt;code&gt;meta: {viewport: &#39;width=device-width, initial-scale=1, shrink-to-fit=no&#39;}&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;base&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{Object|String|false}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;false&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;注入一个 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base&#34;&gt;&lt;code&gt;base&lt;/code&gt;&lt;/a&gt; 标记 &lt;code&gt;base: &amp;quot;https://example.com/path/page.html&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;minify&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{Boolean|Object}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;true&lt;/code&gt; if &lt;code&gt;mode&lt;/code&gt; is &lt;code&gt;&#39;production&#39;&lt;/code&gt;, otherwise &lt;code&gt;false&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;控制输出的分化方式以及以什么方式进行。 参考 &lt;a href=&#34;https://github.com/jantimon/html-webpack-plugin#minification&#34;&gt;minification&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;hash&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{Boolean}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;false&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;如果&amp;quot;true&amp;quot;，则将唯一的&amp;quot;Webpack&amp;quot;编译哈希附加到所有包含的脚本和 CSS 文件。这对于破坏缓存非常有用&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;cache&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{Boolean}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;仅在文件已更改时更新文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;showErrors&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{Boolean}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;允许您仅添加某些区块（例如，仅添加单元测试区块）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;chunks&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{?}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;?&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;允许您仅添加某些区块（例如，仅添加单元测试区块）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;chunksSortMode&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{String|Function}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;auto&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;允许控制在将区块包含在 HTML 之前应如何排序。可选值: &lt;code&gt;&#39;none&#39; | &#39;auto&#39; | &#39;manual&#39; | {Function}&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;excludeChunks&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{Array.}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;``&lt;/td&gt;
+&lt;td&gt;允许您跳过某些区块（例如不添加单元测试区块）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;xhtml&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{Boolean}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;false&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;如果&amp;quot;true&amp;quot;将&amp;quot;link&amp;quot;标记呈现为自关闭（符合 XHTML）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;下面是一个 Webpack 配置示例，说明如何使用这些选项&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;webpack.config.js&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+  entry: &#39;index.js&#39;,
+  output: {
+    path: __dirname + &#39;/dist&#39;,
+    filename: &#39;index_bundle.js&#39;
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: &#39;My App&#39;,
+      filename: &#39;assets/admin.html&#39;
+    })
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;terserwebpackplugin&#34;&gt;TerserWebpackPlugin&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://npmjs.com/package/terser-webpack-plugin&#34;&gt;&lt;img src=&#34;https://img.shields.io/npm/v/terser-webpack-plugin.svg&#34; alt=&#34;npm&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt; &lt;a href=&#34;https://nodejs.org/&#34;&gt;&lt;img src=&#34;https://img.shields.io/node/v/terser-webpack-plugin.svg&#34; alt=&#34;node&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt; &lt;a href=&#34;https://david-dm.org/webpack-contrib/terser-webpack-plugin&#34;&gt;&lt;img src=&#34;https://david-dm.org/webpack-contrib/terser-webpack-plugin.svg&#34; alt=&#34;deps&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt; &lt;a href=&#34;https://github.com/webpack-contrib/terser-webpack-plugin/actions&#34;&gt;&lt;img src=&#34;https://github.com/webpack-contrib/terser-webpack-plugin/workflows/terser-webpack-plugin/badge.svg&#34; alt=&#34;tests&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt; &lt;a href=&#34;https://codecov.io/gh/webpack-contrib/terser-webpack-plugin&#34;&gt;&lt;img src=&#34;https://codecov.io/gh/webpack-contrib/terser-webpack-plugin/branch/master/graph/badge.svg&#34; alt=&#34;cover&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt; &lt;a href=&#34;https://gitter.im/webpack/webpack&#34;&gt;&lt;img src=&#34;https://img.shields.io/badge/gitter-webpack%2Fwebpack-brightgreen.svg&#34; alt=&#34;chat&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt; &lt;a href=&#34;https://packagephobia.now.sh/result?p=terser-webpack-plugin&#34;&gt;&lt;img src=&#34;https://packagephobia.now.sh/badge?p=terser-webpack-plugin&#34; alt=&#34;size&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;此插件使用 terser 来抽取您的 JavaScript。&lt;/p&gt;
+&lt;h4 id=&#34;安装-2&#34;&gt;安装&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ npm install terser-webpack-plugin --save-dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;使用-2&#34;&gt;使用&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;webpack.config.js&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const TerserPlugin = require(&#39;terser-webpack-plugin&#39;);
+
+module.exports = {
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin({
+        test: /\.js(\?.*)?$/i,
+      	include: /\.m?js(\?.*)?$/i,
+      })],
+  },
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;options-2&#34;&gt;Options&lt;/h4&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Name&lt;/th&gt;
+&lt;th&gt;Type&lt;/th&gt;
+&lt;th&gt;Default&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;test&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;String|RegExp|Array&amp;lt;String|RegExp&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/\.m?js(\?.*)?$/i&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;测试以匹配文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;include&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;String|RegExp|Array&amp;lt;String|RegExp&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/\.m?js(\?.*)?$/i&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;要包含的文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;exclude&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;String|RegExp|Array&amp;lt;String|RegExp&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;underfined&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;要排除的文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;cache&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Boolean|String&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;启用文件缓存,webpack5中将移除.缓存目录的默认路径&lt;code&gt;node_modules/.cache/terser-webpack-plugin&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;cacheKeys&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Function&amp;lt;(keys,file)-&amp;gt;Object&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;(keys,file)-&amp;gt;Object&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;允许您覆盖默认缓存键&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;parallel&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Boolean|Number&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;启用/禁用多进程并行运行&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;sourceMap&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Boolean&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;false&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;使用源映射将错误消息位置映射到模块（这会减慢编译速度）。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;minify&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Function&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;undefined&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;允许您覆盖默认抽离函数。默认情况下，插件使用 terser 包。可用于使用和测试未发布的版本或分叉。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;terserOptions&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Object&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;default&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Terser 选项。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;extractComments&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Boolean|String|RegExp|Function&amp;lt;(node,comment)-&amp;gt;Boolean|Object&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;启用/禁用提取注释。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;minicssextractplugin&#34;&gt;MiniCssExtractPlugin&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://npmjs.com/package/mini-css-extract-plugin&#34;&gt;&lt;img src=&#34;https://img.shields.io/npm/v/mini-css-extract-plugin.svg&#34; alt=&#34;npm&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt; &lt;a href=&#34;https://nodejs.org/&#34;&gt;&lt;img src=&#34;https://img.shields.io/node/v/mini-css-extract-plugin.svg&#34; alt=&#34;node&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt; &lt;a href=&#34;https://david-dm.org/webpack-contrib/mini-css-extract-plugin&#34;&gt;&lt;img src=&#34;https://david-dm.org/webpack-contrib/mini-css-extract-plugin.svg&#34; alt=&#34;deps&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt; &lt;a href=&#34;https://github.com/webpack-contrib/mini-css-extract-plugin/actions&#34;&gt;&lt;img src=&#34;https://github.com/webpack-contrib/mini-css-extract-plugin/workflows/mini-css-extract-plugin/badge.svg&#34; alt=&#34;tests&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt; &lt;a href=&#34;https://codecov.io/gh/webpack-contrib/mini-css-extract-plugin&#34;&gt;&lt;img src=&#34;https://codecov.io/gh/webpack-contrib/mini-css-extract-plugin/branch/master/graph/badge.svg&#34; alt=&#34;coverage&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt; &lt;a href=&#34;https://gitter.im/webpack/webpack&#34;&gt;&lt;img src=&#34;https://badges.gitter.im/webpack/webpack.svg&#34; alt=&#34;chat&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt; &lt;a href=&#34;https://packagephobia.now.sh/result?p=mini-css-extract-plugin&#34;&gt;&lt;img src=&#34;https://packagephobia.now.sh/badge?p=mini-css-extract-plugin&#34; alt=&#34;size&#34; loading=&#34;lazy&#34;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;此插件将 CSS 提取到单独的文件中。它为每个包含 CSS 的 JS 文件创建一个 CSS 文件。它支持 CSS 和源映射的按需加载。&lt;/p&gt;
+&lt;p&gt;它基于新的 Webpack v4 功能（模块类型）构建，并且需要 Webpack 4 才能工作。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;异步加载&lt;/li&gt;
+&lt;li&gt;无重复编译（性能）&lt;/li&gt;
+&lt;li&gt;更易于使用&lt;/li&gt;
+&lt;li&gt;特定于 CSS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;安装-3&#34;&gt;安装&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;npm install --save-dev mini-css-extract-plugin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;使用-3&#34;&gt;使用&lt;/h4&gt;
+&lt;p&gt;建议将&lt;code&gt;mini-css-extract-plugin&lt;/code&gt; 提取插件与 &lt;a href=&#34;https://webpack.js.org/loaders/css-loader/&#34;&gt;&lt;code&gt;css-loader&lt;/code&gt;&lt;/a&gt;相结合&lt;/p&gt;
+&lt;p&gt;然后将加载器和插件添加到 Webpack 配置中。例如：&lt;/p&gt;
+&lt;p&gt;Webpack.config.js&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const MiniCssExtractPlugin = require(&#39;mini-css-extract-plugin&#39;);
+
+module.exports = {
+  plugins: [new MiniCssExtractPlugin()],
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, &#39;css-loader&#39;],
+      },
+    ],
+  },
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;options-3&#34;&gt;Options&lt;/h4&gt;
+&lt;h5 id=&#34;publicpath&#34;&gt;&lt;code&gt;publicpath&lt;/code&gt;&lt;/h5&gt;
+&lt;p&gt;Type: &lt;code&gt;String|Function&lt;/code&gt; Default: the &lt;code&gt;publicPath&lt;/code&gt; in &lt;code&gt;webpackOptions.output&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;指定目标文件的自定义公共路径。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;String&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Webpack.config.js&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const MiniCssExtractPlugin = require(&#39;mini-css-extract-plugin&#39;);
+
+module.exports = {
+  plugins: [
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: &#39;[name].css&#39;,
+      chunkFilename: &#39;[id].css&#39;,
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: &#39;/public/path/to/&#39;,
+            },
+          },
+          &#39;css-loader&#39;,
+        ],
+      },
+    ],
+  },
+};
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;Function&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Webpack.config.js&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const MiniCssExtractPlugin = require(&#39;mini-css-extract-plugin&#39;);
+
+module.exports = {
+  plugins: [
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: &#39;[name].css&#39;,
+      chunkFilename: &#39;[id].css&#39;,
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: (resourcePath, context) =&amp;gt; {
+                return path.relative(path.dirname(resourcePath), context) + &#39;/&#39;;
+              },
+            },
+          },
+          &#39;css-loader&#39;,
+        ],
+      },
+    ],
+  },
+};
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h5 id=&#34;esmodule&#34;&gt;&lt;code&gt;esModule&lt;/code&gt;&lt;/h5&gt;
+&lt;p&gt;Type: &lt;code&gt;Boolean&lt;/code&gt; Default: &lt;code&gt;false&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;默认情况下，mini-css-extract-plugin生成使用 CommonJS 模块语法的 JS 模块。在某些情况下，使用 ES 模块是有益的，例如在 &lt;a href=&#34;https://webpack.js.org/plugins/module-concatenation-plugin/&#34;&gt;module concatenation&lt;/a&gt; 和 &lt;a href=&#34;https://webpack.js.org/guides/tree-shaking/&#34;&gt;tree shaking&lt;/a&gt;的情况下。&lt;/p&gt;
+&lt;p&gt;您可以使用：&lt;/p&gt;
+&lt;p&gt;webpack.config.js&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const MiniCssExtractPlugin = require(&#39;mini-css-extract-plugin&#39;);
+
+module.exports = {
+  plugins: [new MiniCssExtractPlugin()],
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              esModule: true,
+            },
+          },
+          &#39;css-loader&#39;,
+        ],
+      },
+    ],
+  },
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h5 id=&#34;modules&#34;&gt;&lt;code&gt;modules&lt;/code&gt;&lt;/h5&gt;
+&lt;p&gt;Type: &lt;code&gt;Object&lt;/code&gt; Default: &lt;code&gt;undefined&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;配置 CSS 模块&lt;/p&gt;
+&lt;h6 id=&#34;namedexport&#34;&gt;&lt;code&gt;namedExport&lt;/code&gt;&lt;/h6&gt;
+&lt;p&gt;Type: &lt;code&gt;Boolean&lt;/code&gt; Default: &lt;code&gt;false&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;启用/禁用名为局部变量导出的 ES 模块。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;⚠名字使用驼峰命名。&lt;/p&gt;
+&lt;p&gt;⚠不允许在 css 类名称中使用 JavaScript 保留字。&lt;/p&gt;
+&lt;p&gt;⚠选项 esModule 和&lt;em&gt;modules.namedExport&lt;/em&gt;在&lt;em&gt;css-loader&lt;/em&gt;和 &lt;em&gt;MiniCssExtractPlugin.loader&lt;/em&gt; 中应启用。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Webpack.config.js&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const MiniCssExtractPlugin = require(&#39;mini-css-extract-plugin&#39;);
+
+module.exports = {
+  plugins: [new MiniCssExtractPlugin()],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              esModule: true,
+              modules: {
+                namedExport: true,
+              },
+            },
+          },
+          {
+            loader: &#39;css-loader&#39;,
+            options: {
+              esModule: true,
+              modules: {
+                namedExport: true,
+                localIdentName: &#39;foo__[name]__[local]&#39;,
+              },
+            },
+          },
+        ],
+      },
+    ],
+  },
+};
+&lt;/code&gt;&lt;/pre&gt;
+">Webpack-plugins笔记</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://exclison.github.io/post/webpack-loaders-bi-ji/"" data-c="
+          &lt;h2 id=&#34;loaders&#34;&gt;loaders&lt;/h2&gt;
+&lt;p&gt;webpack 可以使用 &lt;a href=&#34;https://www.webpackjs.com/concepts/loaders&#34;&gt;loader&lt;/a&gt; 来预处理文件。这允许你打包除 JavaScript 之外的任何静态资源。你可以使用 Node.js 来很简单地编写自己的 loader。&lt;/p&gt;
+&lt;p&gt;loader 通过在 &lt;code&gt;require()&lt;/code&gt; 语句中使用 &lt;code&gt;loadername!&lt;/code&gt; 前缀来激活，或者通过 webpack 配置中的正则表达式来自动应用 - 查看&lt;a href=&#34;https://www.webpackjs.com/concepts/loaders#configuration&#34;&gt;配置&lt;/a&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;babel-loader&#34;&gt;babel-loader&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;安装&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;npm install --save-dev babel-loader @babel/core
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;用法&lt;/p&gt;
+&lt;p&gt;通过config方式&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;module: {
+  rules: [
+    { test: /\.js$/, exclude: /node_modules/, loader: &amp;quot;babel-loader&amp;quot; }
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;通过loader方式&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;var Person = require(&amp;quot;babel!./Person.js&amp;quot;).default;
+new Person();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;创建&lt;code&gt;.babelrc&lt;/code&gt;配置文件&lt;/p&gt;
+&lt;p&gt;非常棒！虽然已经配置好了 Babel ，但并没有让它真正&lt;em&gt;生效&lt;/em&gt;。在项目的根目录中创建一个 &lt;a href=&#34;https://babel.docschina.org/docs/usage/babelrc&#34;&gt;.babelrc&lt;/a&gt; 文件并启用一些&lt;a href=&#34;https://babel.docschina.org/docs/plugins&#34;&gt;插件&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;首先，你可以使用转换 ES2015+ 的 &lt;a href=&#34;https://babel.docschina.org/docs/en/babel-preset-env&#34;&gt;env preset&lt;/a&gt; 。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;npm install @babel/preset-env --save-dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;为了让 preset 生效，你需要像下面这样定义你的 &lt;code&gt;.babelrc&lt;/code&gt; 文件：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+  &amp;quot;presets&amp;quot;: [&amp;quot;@babel/preset-env&amp;quot;]
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;webpack使用方式&lt;/p&gt;
+&lt;p&gt;Webpack.config.js&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;module: {
+  rules: [
+    {
+      test: /\.js$/,
+      exclude: /(node_modules|bower_components)/,
+      use: {
+        loader: &#39;babel-loader&#39;,
+        options: {
+          presets: [&#39;@babel/preset-env&#39;],
+          plugins: [require(&#39;@babel/plugin-transform-object-rest-spread&#39;)]
+        }
+      }
+    }
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h5 id=&#34;options&#34;&gt;Options&lt;/h5&gt;
+&lt;h6 id=&#34;plugin-and-preset-options&#34;&gt;Plugin and Preset options&lt;/h6&gt;
+&lt;h6 id=&#34;plugins&#34;&gt;&lt;code&gt;plugins&lt;/code&gt;&lt;/h6&gt;
+&lt;p&gt;Type: &lt;code&gt;Array&amp;lt;PluginEntry | Plugin&amp;gt;&lt;/code&gt;(PluginEntry)&lt;/p&gt;
+&lt;p&gt;Default:[]&lt;/p&gt;
+&lt;p&gt;处理此文件时要激活的插件数组。有关各个条目如何交互（尤其是在多个嵌套的&amp;quot;env&amp;quot;和&amp;quot;overrides&amp;quot;配置之间使用时）的信息，请参阅 &lt;a href=&#34;https://babel.docschina.org/docs/en/options#merging&#34;&gt;merging&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;注意：该选项还允许来自 Babel 本身的插件实例，但不建议直接使用这些实例。如果您需要创建插件或预设的持久表示形式，应使用 babel.createConfigItem（）。&lt;/p&gt;
+&lt;h6 id=&#34;presets&#34;&gt;&lt;code&gt;presets&lt;/code&gt;&lt;/h6&gt;
+&lt;p&gt;Type:&lt;code&gt;Array&amp;lt;PresetEntry&amp;gt;&lt;/code&gt;(PresetEntry)&lt;/p&gt;
+&lt;p&gt;Default:[]&lt;/p&gt;
+&lt;p&gt;处理此文件时要激活的预设数组。有关各个条目如何交互（尤其是在多个嵌套的&amp;quot;env&amp;quot;和&amp;quot;overrides&amp;quot;配置之间使用时）的信息，请参阅 &lt;a href=&#34;https://babel.docschina.org/docs/en/options#merging&#34;&gt;merging&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;注意：预设的格式与插件相同，但名称规范化需要&amp;quot;预设&amp;quot;而不是&amp;quot;插件-&amp;quot;，预设不能是插件的实例。&lt;/p&gt;
+">webpack-loaders笔记</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://exclison.github.io/post/webpack-pei-zhi-xiang-jie/"" data-c="
