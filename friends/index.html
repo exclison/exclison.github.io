@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#495057">
 <title>Exclison</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1600680720265">
+<link rel="shortcut icon" href="/favicon.ico?v=1603433020515">
 <link rel="stylesheet" href="/media/css/mist.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -196,7 +196,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">6</span>
+        <span class="site-item-stat-count">7</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -473,6 +473,109 @@
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://exclison.github.io/post/echarts-zhong-guo-di-tu-shi-yong-ji-lu/"" data-c="
+          &lt;h1 id=&#34;中国地图&#34;&gt;中国地图&lt;/h1&gt;
+&lt;h2 id=&#34;引入echarts&#34;&gt;&lt;strong&gt;引入Echarts&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;echarts 中默认包含china.js以及中国各省份的js文件&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// 指定图表的配置项和数据
+      let option = {
+        tooltip: {},
+        geo: {
+          // 这个是重点配置区
+          map: &amp;quot;china&amp;quot;, // 表示中国地图
+          roam: false,
+          label: {
+            normal: {
+              show: false, // 是否显示对应地名
+              textStyle: {
+                fontSize: &amp;quot;7&amp;quot;,
+                color:&#39;#fff&#39;,
+              },
+            },
+            emphasis: {
+              textStyle: {
+                fontSize: &amp;quot;7&amp;quot;,
+                color:&#39;#fff&#39;,
+              },
+            },
+          },
+          itemStyle: {
+            normal: {
+              areaColor: &#39;rgba(30, 52, 118, 1)&#39;,
+              borderColor: &amp;quot;#00E7FF&amp;quot;,
+            },
+            emphasis: {
+              areaColor: &#39;rgba(30, 52, 118, 1)&#39;,
+              borderColor: &amp;quot;#00E7FF&amp;quot;,
+              
+            },
+          },
+          zoom:1.2
+          // regions: haveData
+        },
+        series: [],
+      };
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;各省份地图&#34;&gt;各省份地图&lt;/h1&gt;
+&lt;h2 id=&#34;获取geojson&#34;&gt;获取geoJSON&lt;/h2&gt;
+&lt;h3 id=&#34;1-通过地图选择器下载geojson数据或者直接引用里面的地址&#34;&gt;1. 通过&lt;a href=&#34;http://datav.aliyun.com/tools/atlas/#&amp;amp;lat=30.343372698262712&amp;amp;lng=106.720060693723&amp;amp;zoom=4.5&#34;&gt;地图选择器&lt;/a&gt;下载geoJSON数据,或者直接引用里面的地址&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;  const taiwanJson = require(&#39;./taiwan&#39;)//下载的geoJSON文件
+let myChart = this.$echarts.init(this.$refs.taiwan_chart);
+        this.$echarts.registerMap(&#39;taiwan&#39;,taiwanJson);
+
+        // 指定图表的配置项和数据
+        let option = {
+          tooltip: {},
+          geo: {
+            // 这个是重点配置区
+            map: &amp;quot;taiwan&amp;quot;, // 省份
+            roam: true,
+            center: [122.50, 25.05],
+            label: {
+              normal: {
+                show: false, // 是否显示对应地名
+                textStyle: {
+                  fontSize: &amp;quot;7&amp;quot;,
+                  color:&#39;#fff&#39;,
+                },
+              },
+              emphasis: {
+                textStyle: {
+                  fontSize: &amp;quot;7&amp;quot;,
+                  color:&#39;#fff&#39;,
+                },
+              },
+            },
+            itemStyle: {
+              normal: {
+                areaColor: &#39;rgba(30, 52, 118, 1)&#39;,
+                borderColor: &amp;quot;#00E7FF&amp;quot;,
+              },
+              emphasis: {
+                areaColor: &#39;rgba(30, 52, 118, 1)&#39;,
+                borderColor: &amp;quot;#00E7FF&amp;quot;,
+              },
+            },
+            zoom:2
+            // regions: haveData
+          },
+          series: [
+            {
+              name: &amp;quot;&amp;quot;,
+              type: &amp;quot;map&amp;quot;,
+              // coordinateSystem: &amp;quot;geo&amp;quot;, // 对应上方配置
+              data:[],
+            },
+          ],
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+&lt;/code&gt;&lt;/pre&gt;
+">Echarts中国地图使用记录</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://exclison.github.io/post/webpack-plugins-bi-ji/"" data-c="
