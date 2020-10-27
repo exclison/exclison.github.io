@@ -8,7 +8,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#495057">
-<title>Webpack使用 | Exclison</title>
+<title>关于浏览器的预检(OPTION)请求 | Exclison</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1603779697241">
 <link rel="stylesheet" href="/media/css/mist.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -38,7 +38,7 @@
 
 
 
-  <meta name="description" content="Webpack使用" />
+  <meta name="description" content="关于浏览器的预检(OPTION)请求" />
   <meta name="keywords" content="" />
 </head>
 
@@ -245,26 +245,15 @@
     <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li>
+<li><a href="#%E5%85%B3%E4%BA%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E9%A2%84%E6%A3%80option%E8%AF%B7%E6%B1%82">关于浏览器的预检(OPTION)请求</a>
 <ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#1%E9%A1%B9%E7%9B%AE%E5%88%9D%E5%A7%8B%E5%8C%96">1.项目初始化</a></li>
-<li><a href="#2%E5%AE%89%E8%A3%85webpack">2.安装webpack</a></li>
-<li><a href="#3%E5%88%9B%E5%BB%BA%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">3.创建配置文件</a></li>
-<li><a href="#4loaders">4.loaders</a></li>
-<li><a href="#5plugins">5.plugins</a></li>
-<li></li>
-<li><a href="#6%E7%8E%AF%E5%A2%83%E6%9E%84%E5%BB%BA">6.环境构建</a></li>
-<li><a href="#7%E8%A1%A5%E5%85%85%E4%BB%A3%E7%A0%81">7.补充代码</a></li>
+<li><a href="#1-option%E9%A2%84%E6%A3%80%E8%AF%B7%E6%B1%82%E7%9A%84%E4%BD%9C%E7%94%A8">1. OPTION预检请求的作用</a></li>
+<li><a href="#2-%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%BC%9A%E5%87%BA%E5%8F%91cors%E7%9A%84%E9%A2%84%E6%A3%80%E8%AF%B7%E6%B1%82">2. 什么场景会出发CORS的预检请求</a></li>
 </ul>
 </li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a href="#3-cors">3. CORS</a></li>
+<li><a href="#4%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5">4.同源策略</a></li>
+<li><a href="#5-%E5%90%8C%E6%BA%90">5. 同源</a></li>
 </ul>
 </li>
 </ul>
@@ -532,8 +521,8 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://exclison.github.io/post/webpack-shi-yong/">
-      Webpack使用
+    <a class="post-title-link" href="https://exclison.github.io/post/guan-yu-liu-lan-qi-de-yu-jian-optionqing-qiu/">
+      关于浏览器的预检(OPTION)请求
     </a>
   </h1>
   <div class="post-meta">
@@ -541,830 +530,71 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2020-09-19 10:47:50">2020-09-19</span>
+      <span class="publish-time" data-t="2020-10-27 14:21:12">2020-10-27</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
     <span class="meta-item">
       <i class="fa fa-clock-o"></i>
-      <span>11<span class="language" data-lan="minute">分钟</span></span>
+      <span>4<span class="language" data-lan="minute">分钟</span></span>
     </span>
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>1940<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>996<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
   </div>
 </section>
             <div class="post-body next-md-body" id="post_body">
-              <h5 id="1项目初始化">1.项目初始化</h5>
-<pre><code>npm init
-</code></pre>
-<h5 id="2安装webpack">2.安装webpack</h5>
-<pre><code>npm i webpack webpack-dev-server
-</code></pre>
-<h5 id="3创建配置文件">3.创建配置文件</h5>
-<pre><code class="language-text">//项目文档结构
-web
-├─package-lock.json
-├─package.json
-├─src
-|  └main.js
-├─scripts // 构建脚本文件夹
-|    ├─dev.js //开发环境构建脚本
-|    ├─prod.js //生产环境构建脚本
-|    ├─config // 构建脚本配置文件夹
-|    |   ├─index.js // webpack配置文件 导出开发与生产配置函数
-|    |   ├─util.js // 导出工具函数
-|    |   ├─plugin // 封装插件文件夹
-|    |   |   └index.js
-|    |   ├─loader // 封装loaders文件夹
-|    |   |   └index.js
-├─public
-|   └index.html // html模板
-├─dist // 打包输出路径
-</code></pre>
-<h5 id="4loaders">4.loaders</h5>
-<p><font color=#0089ff>注意:第4,第5步为常用loader和plugin介绍</font></p>
+              <h2 id="关于浏览器的预检option请求">关于浏览器的预检(OPTION)请求</h2>
+<p>OPTION请求没有附带请求数据,响应体也为空</p>
+<h3 id="1-option预检请求的作用">1. OPTION预检请求的作用</h3>
+<p>OPTION请求用于获取目的资源所支持的通信选项</p>
 <ul>
 <li>
-<p>thread-loader</p>
-<pre><code class="language-javascript">//安装 使用时，需将此 loader 放置在其他 loader 之前。放置在此 loader 之后的 loader 会在一个独立的 worker 池中运行
-npm install --save-dev thread-loader
-
-//webpack.config.js
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        include: path.resolve(&quot;src&quot;),
-        use: [
-          &quot;thread-loader&quot;,
-          // 耗时的 loader （例如 babel-loader）
-        ]
-      }
-    ]
-  }
-}
-
-</code></pre>
+<p>检测服务器所支持的请求方法</p>
 </li>
 <li>
-<p>babel-loader</p>
-<pre><code class="language-javascript">//当前演示webpack使用方法 其他参照babel官网
-//安装
-npm install --save-dev babel-loader @babel/core
-
-//webpack.config.js
-module: {
-  rules: [
-    { test: /\.js$/, exclude: /node_modules/, loader: &quot;babel-loader&quot; }
-  ]
-}
-
-//创建 .babelrc 配置文件
-//安装插件 使用转换 ES2015+ 的 env preset 
-npm install @babel/preset-env --save-dev 
-
-//.babelrc
-{
-  &quot;presets&quot;: [&quot;@babel/preset-env&quot;]
-}
-</code></pre>
-</li>
-<li>
-<p>eslint-loader</p>
-<pre><code class="language-javascript">//安装
-npm install eslint --save-dev //安装eslint
-npm install eslint-loader --save-dev //安装eslint-loader
-
-//webpack.config.js
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader'],
-      },
-    ],
-  },
-};
-
-
-
-</code></pre>
-</li>
-<li>
-<p>style-loader</p>
-<pre><code class="language-javascript">//安装
-npm install --save-dev style-loader
-//webpack.config.js
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-    ],
-  },
-};
-
-</code></pre>
-</li>
-<li>
-<p>css-loader</p>
-<pre><code class="language-javascript">//安装
-npm install --save-dev css-loader
-
-//webpack.config.js
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-    ],
-  },
-};
-</code></pre>
-</li>
-<li>
-<p>postcss-loader</p>
-<pre><code class="language-javascript">npm i -D postcss-loader
-
-//postcss.config.js
-module.exports = {
-  parser: 'sugarss',
-  plugins: {
-    'postcss-import': {},
-    'postcss-cssnext': {},
-    'cssnano': {}
-  }
-}
-//webpack.config.js
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: [ 'style-loader', 'postcss-loader' ]
-      }
-    ]
-  }
-}
-</code></pre>
-</li>
-<li>
-<p>less-loader</p>
-<pre><code class="language-javascript">//安装
-npm install --save-dev less-loader less
-
-// webpack.config.js
-module.exports = {
-    ...
-    module: {
-        rules: [{
-            test: /\.less$/,
-            use: [{
-                loader: &quot;style-loader&quot; // creates style nodes from JS strings
-            }, {
-                loader: &quot;css-loader&quot; // translates CSS into CommonJS
-            }, {
-                loader: &quot;less-loader&quot; // compiles Less to CSS
-            }]
-        }]
-    }
-};
-</code></pre>
-</li>
-<li>
-<p>Sass-loader</p>
-<pre><code class="language-javascript">npm install sass-loader node-sass webpack --save-dev
-// webpack.config.js
-module.exports = {
-  ...
-  module: {
-    rules: [{
-      test: /\.scss$/,
-      use: [{
-          loader: &quot;style-loader&quot; // 将 JS 字符串生成为 style 节点
-      }, {
-          loader: &quot;css-loader&quot; // 将 CSS 转化成 CommonJS 模块
-      }, {
-          loader: &quot;sass-loader&quot; // 将 Sass 编译成 CSS
-      }]
-    }]
-  }
-};
-</code></pre>
-</li>
-<li>
-<p>Vue-loader</p>
-<pre><code class="language-javascript">//安装
-npm install -D vue-loader vue-template-compiler
-
-// webpack.config.js
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
-
-module.exports = {
-  module: {
-    rules: [
-      // ... 其它规则
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader'
-      }
-    ]
-  },
-  plugins: [
-    // 请确保引入这个插件！
-    new VueLoaderPlugin()
-  ]
-}
-</code></pre>
-</li>
-<li>
-<p>Url-loader</p>
-<pre><code class="language-javascript">//安装
-npm install --save-dev url-loader
-
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.(png|jpg|gif)$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 8192
-            }
-          }
-        ]
-      }
-    ]
-  }
-}
-</code></pre>
-</li>
-<li>
-<p>File-loader</p>
-<pre><code class="language-javascript">//安装
-npm install --save-dev file-loader
-
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.(png|jpg|gif)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {}
-          }
-        ]
-      }
-    ]
-  }
-}
-</code></pre>
+<p>CORS中的预检请求</p>
+<p>CORS规范要求,对那些可能对服务器数据产生副作用的HTTP请求方法(特别是GET以外的HTTP请求,或者搭配某些MIME类型的POST请求),浏览器必须首先使用OPTIONS方法发起一个预检请求(preflight request),从而获知服务端是否允许该跨域请求.服务器确认允许之后,才发起实际的HTTP请求.在预检请求的返回中,服务端也可以通知客户端,是否需要携带身份凭证(包括Cookies和HTTP认证相关数据)</p>
 </li>
 </ul>
-<h5 id="5plugins">5.plugins</h5>
+<h3 id="2-什么场景会出发cors的预检请求">2. 什么场景会出发CORS的预检请求</h3>
+<p><strong>在CORS机制中,客户端(浏览器)将请求分为两种:</strong></p>
+<ol>
+<li>
+<p>简单请求(需同时满足以下条件)</p>
 <ul>
-<li>
-<p>mini-css-extract-plugin</p>
-<pre><code class="language-javascript">//安装
-npm install --save-dev mini-css-extract-plugin
-
-//webpack.config.js
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
-module.exports = {
-  plugins: [new MiniCssExtractPlugin()],
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      },
-    ],
-  },
-};
-Options
-
-</code></pre>
-</li>
-<li>
-<p>html-webpack-plugin</p>
-<pre><code class="language-javascript">//安装
-npm install --save-dev html-webpack-plugin
-
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var path = require('path');
-
-var webpackConfig = {
-  entry: 'index.js',
-  output: {
-    path: path.resolve(__dirname, './dist'),
-    filename: 'index_bundle.js'
-  },
-  plugins: [new HtmlWebpackPlugin()]
-};
-</code></pre>
-</li>
-<li>
-<p>clean-webpack-plugin</p>
-<pre><code class="language-javascript">const { CleanWebpackPlugin } = require('clean-webpack-plugin');
- 
-const webpackConfig = {
-    plugins: [
-        /**
-         * All files inside webpack's output.path directory will be removed once, but the
-         * directory itself will not be. If using webpack 4+'s default configuration,
-         * everything under &lt;PROJECT_DIR&gt;/dist/ will be removed.
-         * Use cleanOnceBeforeBuildPatterns to override this behavior.
-         *
-         * During rebuilds, all webpack assets that are not used anymore
-         * will be removed automatically.
-         *
-         * See `Options and Defaults` for information
-         */
-        new CleanWebpackPlugin(),
-    ],
-};
- 
-module.exports = webpackConfig;
-</code></pre>
-</li>
-<li>
-<p>optimize-css-assets-webpack-plugin</p>
-<pre><code class="language-javascript">npm install --save-dev optimize-css-assets-webpack-plugin
-
-var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
-      }
-    ]
-  },
-  plugins: [
-    new ExtractTextPlugin('styles.css'),
-    new OptimizeCssAssetsPlugin({
-      assetNameRegExp: /\.optimize\.css$/g,
-      cssProcessor: require('cssnano'),
-      cssProcessorPluginOptions: {
-        preset: ['default', { discardComments: { removeAll: true } }],
-      },
-      canPrint: true
-    })
-  ]
-};
-</code></pre>
-</li>
-<li>
-<p>terser-webpack-plugin</p>
-<pre><code class="language-javascript">npm install terser-webpack-plugin --save-dev
-
-const TerserPlugin = require('terser-webpack-plugin');
- 
-module.exports = {
-  optimization: {
-    minimize: true,
-    minimizer: [new TerserPlugin()],
-  },
-};
-</code></pre>
-</li>
-<li>
-<p>HotModuleReplacementPlugin</p>
-<pre><code class="language-javascript">const { HotModuleReplacementPlugin } = require('webpack');
-
-const webpackConfig = {
-    plugins: [
-        new HotModuleReplacementPlugin();
-    ],
-};
- 
-module.exports = webpackConfig;
-
-</code></pre>
-<h5 id=""></h5>
-</li>
+<li>请求方法是以下三种之一:GET,HEAD,POST</li>
+<li>HTTP的头信息不超出以下几种字段:Accept,Accept-Language,Content-Language,Last-Event-ID,Content-Type</li>
+<li>Content-Type的值仅限以下三种:text\plain,multipart/form-data,application/x-www-form-urlencoded</li>
 </ul>
-<h5 id="6环境构建">6.环境构建</h5>
-<ul>
-<li>
-<p>开发环境</p>
-<pre><code class="language-javascript">//使用nodeAPI构建开发环境
-// ./scripts/dev.js
-const Webpack = require(&quot;webpack&quot;);
-const WebpackDevServer = require(&quot;webpack-dev-server&quot;);
-const { getDevConfig } = require(&quot;./config&quot;);
-const webpackConfig = getDevConfig();
-
-const compiler = Webpack(webpackConfig);
-const devServerOptions = Object.assign({}, webpackConfig.devServer, {
-  historyApiFallback: true,
-  open: true,
-  hot: true,
-  inline: true,
-  stats: &quot;errors-warnings&quot;,
-  overlay: {
-    // 浏览器全屏显示错误
-    errors: true,
-    warnings: false,
-  },
-  stats: {
-    colors: true,
-  },
-});
-const server = new WebpackDevServer(compiler, devServerOptions);
-
-server.listen(8087, &quot;127.0.0.1&quot;, () =&gt; {
-  console.log(&quot;Starting server on http://localhost:8087&quot;);
-});
-
-</code></pre>
 </li>
 <li>
-<p>生产环境</p>
-<pre><code class="language-javascript">//使用nodeAPI构建生产环境
-// ./scripts/prod.js
-const { getProdConfig } = require(&quot;./config&quot;);
-const config = getProdConfig();
-
-const webpack = require(&quot;webpack&quot;);
-
-const compiler = webpack(config);
-
-compiler.run((err, stats) =&gt; {
-  const info = stats.toJson();
-
-  if (err) {
-    console.error(err.stack || err);
-    if (err.details) {
-      console.error(err.details);
-    }
-    return;
-  }else if (stats.hasErrors()) {
-    console.error(info.errors);
-  }else if (stats.hasWarnings()) {
-    console.warn(info.warnings);
-  }else{
-      console.log('build successfully')
-      console.log([
-        console.log(`Time: ${info.time}ms`),
-        console.log(`output: ${info.outputPath}`),
-        console.log(`webpack version: ${info.version}`),
-      ].join('\n'))
-  }
-});
-
+<p>非简单请求(但凡不同时满足上面两个条件,就属于非简单请求)</p>
+<p>会触发浏览器发生预检请求,这是浏览器行为.“预检请求“的使用,可以避免跨域请求对服务器的用户数据产生未预期到影响.</p>
+<pre><code class="language-javascript">axios.get('/api/user',{headers:{'token':'thisisatoken'}})
 </code></pre>
-</li>
-</ul>
-<h5 id="7补充代码">7.补充代码</h5>
-<ul>
-<li>
-<p>将webpack配置文件以函数形式封装</p>
-<pre><code class="language-javascript">// ./scripts/config/index.js
-const {
-  getJSLoader,
-  getVueLoader,
-  getCSSLoader,
-  getLESSLoader,
-  getSASSLoader,
-  getAssetsLoader,
-} = require(&quot;./loader&quot;);
-
-const { 
-  getVueLoaderPlugin,
-  getHtmlWebpackPlugin,
-  getStylePlugin,
-  getMiniCssExtractPlugin,
-  getTerserPlugin,
-  getHotModuleReplacementPlugin,
- } = require(&quot;./plugin&quot;);
-
-const { reslove } = require(&quot;./util&quot;);
-
-function getCommonConfig () {
-  return {
-    entry: reslove(&quot;./src/main.js&quot;), // 入口文件
-    resolve: {
-      // 解析模块请求的选项
-      // （不适用于对 loader 解析）
-
-      extensions: [&quot;.js&quot;, &quot;.json&quot;, &quot;.jsx&quot;, &quot;.css&quot;],
-      // 使用的扩展名
-
-      alias: {
-        // 模块别名列表
-        &quot;@&quot;: reslove(&quot;./src&quot;),
-      },
-    },
-  };
-}
-
-exports.getDevConfig = function () {
-  const mode = &quot;development&quot;;
-
-  const common = getCommonConfig();
-
-  return Object.assign(common, {
-    output: {
-      path: reslove(&quot;./dist&quot;), //打包后的文件存放的地方
-      filename: &quot;[name].[hash].js&quot;, //打包后输出文件的文件名
-    },
-    mode,
-    module: {
-      // 关于模块配置
-      rules: [
-        // 模块规则（配置 loader、解析器等选项）
-        getJSLoader(mode),
-        getVueLoader(mode),
-        getCSSLoader(mode),
-        getLESSLoader(mode),
-        getSASSLoader(mode),
-        ...getAssetsLoader(mode),
-      ],
-    },
-    plugins: [
-      getVueLoaderPlugin(),
-      getHtmlWebpackPlugin({
-        template:reslove('./public/index.html'),
-        filename:'index.html',
-        minify: {
-          caseSensitive: false, // 是否大小写敏感
-          collapseWhitespace: true, // 是否去除空格
-          removeAttributeQuotes: true, // 去掉属性引用
-          removeComments: true, // 去注释
-        },
-      }),
-      getHotModuleReplacementPlugin(),
-    ],
-  });
-}
-
-exports.getProdConfig = function () {
-  const mode = &quot;production&quot;;
-
-  const common = getCommonConfig();
-
-  return Object.assign(common, {
-    output: {
-      path: reslove(&quot;./dist&quot;), //打包后的文件存放的地方
-      filename: &quot;[name].[chunkhash].js&quot;, //打包后输出文件的文件名
-    },
-    mode,
-    module: {
-      // 关于模块配置
-      rules: [
-        // 模块规则（配置 loader、解析器等选项）
-        getJSLoader(mode),
-        getVueLoader(mode),
-        getCSSLoader(mode),
-        getLESSLoader(mode),
-        getSASSLoader(mode),
-        ...getAssetsLoader(mode),
-      ],
-    },
-    plugins: [
-      getVueLoaderPlugin(),
-      getHtmlWebpackPlugin({
-        template:reslove('./public/index.html'),
-        filename:'index.html',
-        minify: {
-          caseSensitive: false, // 是否大小写敏感
-          collapseWhitespace: true, // 是否去除空格
-          removeAttributeQuotes: true, // 去掉属性引用
-          removeComments: true, // 去注释
-        },
-      }),
-      getMiniCssExtractPlugin(),
-      getStylePlugin(),
-    ],
-    optimization: {
-      minimize: true,
-      minimizer: [new getTerserPlugin()],
-    },
-  });
-}
-
+<p>上述代码中添加了token 是一个复杂请求,会触发浏览器的预检请求,可以在服务端解决</p>
+<pre><code class="language-javascript">res.writeHead(200,{
+  &quot;Access-Control-Allow-Origin&quot;:&quot;http://localhost:3000&quot;,//解决跨域问题,放开请求的网站
+  &quot;Access-Control-Allow-Headers&quot;:&quot;token,Content-Type&quot;,//解决预检请求问题
+  &quot;Access-Control-Allow-Headers&quot;:&quot;PUT&quot;,//放开PUT请求
+})
 </code></pre>
+<p>如果类似浏览器这种，包含 CORS 机制的客户端发送的请求，每次都要经过一个复杂逻辑才能知道自己是否跨域，服务器的压力和用户体验是不理想的，那么预检请求就孕育而生：发送实际请求前，先发送预检请求询问服务器是否允许跨域，不允许就不发送实际请求，服务器只需要对预检请求进行跨域处理。<br>
+这样来看，在 CORS 机制中，发送预检请求是一种保护机制，保护资源不被未授权的请求修改。和授权服务很像，预检请求通过了，浏览器后续对同一服务的请求，不需要做跨域询问，服务端不想支持跨域访问，啥也不用做。</p>
 </li>
-<li>
-<p>封装常用loaders</p>
-<pre><code class="language-javascript">// ./scripts/config/loader/index.js
-const MiniCssExtractPlugin = require(&quot;mini-css-extract-plugin&quot;);
-const eslintLoader = {
-  loader: &quot;eslint-loader&quot;,
-  options: {
-    fix: true,
-  },
-};
-exports.getJSLoader = function (mode) {
-  const use = [
-    &quot;thread-loader&quot;,
-    {
-      loader: &quot;babel-loader&quot;,
-      options: {
-        presets: [&quot;@babel/preset-env&quot;],
-      },
-    },
-  ];
-
-  mode === &quot;development&quot; &amp;&amp; use.push(eslintLoader);
-
-  return {
-    test: /\.js$/,
-    use,
-    exclude: /node_modules/,
-  };
-}
-
-exports.getVueLoader = function (mode) {
-  const use = [&quot;vue-loader&quot;];
-  mode === &quot;development&quot; &amp;&amp; use.push(eslintLoader);
-
-  return {
-    test: /\.vue$/,
-    use,
-  };
-}
-
-exports.getCSSLoader = function (mode) {
-  const use = [
-    mode === &quot;development&quot; ? &quot;style-loader&quot; : MiniCssExtractPlugin.loader,
-    &quot;css-loader&quot;,
-    &quot;postcss-loader&quot;,
-  ];
-
-  return {
-    test: /\.css$/i,
-    use,
-  };
-}
-
-exports.getLESSLoader = function (mode) {
-  const use = [
-    mode === &quot;development&quot; ? &quot;style-loader&quot; : MiniCssExtractPlugin.loader,
-    &quot;css-loader&quot;,
-    &quot;postcss-loader&quot;,
-    &quot;less-loader&quot;,
-  ];
-
-  return {
-    test: /\.less$/i,
-    use,
-  };
-}
-exports.getSASSLoader = function (mode) {
-  const use = [
-    mode === &quot;development&quot; ? &quot;style-loader&quot; : MiniCssExtractPlugin.loader,
-    &quot;css-loader&quot;,
-    &quot;postcss-loader&quot;,
-    &quot;sass-loader&quot;,
-  ];
-
-  return {
-    test: /\.less$/i,
-    use,
-  };
-}
-exports.getAssetsLoader = function (mode) {
-
-    const name = mode === &quot;development&quot; ? &quot;[name].[ext]&quot; : &quot;[name].[contenthash].[ext]&quot;
-
-    const imgReslove = {
-        test: /\.(png|jpg|jpeg|svg|gif)$/,
-        use: [
-          {
-            loader: &quot;url-loader&quot;,
-            options: {
-              name: `assets/images/${name}`,
-              limit: 3 * 1024,
-            },
-          },
-        ],
-      }
-
-    const mediaReslove = {
-        test: /\.(mp4|avi|mp3|rmvb|wmv|flv|webm)$/,
-        use: [
-          {
-            loader: &quot;file-loader&quot;,
-            options: {
-              name: `assets/media/${name}`,
-            },
-          },
-        ],
-      }
-
-    const fontReslove = {
-        test: /\.(woff2|woff|eot|ttf|otf)$/,
-        use: [
-          {
-            loader: &quot;url-loader&quot;,
-            options: {
-              name: `assets/font/${name}`,
-            },
-          },
-        ],
-      }
-
-
-  return [imgReslove,mediaReslove,fontReslove];
-}
-
-</code></pre>
-</li>
-<li>
-<p>封装常用plugins</p>
-<pre><code class="language-javascript">// ./scripts/config/plugins/index.js
-
-const VueLoaderPlugin = require(&quot;vue-loader/lib/plugin&quot;);
-const HtmlWebpackPlugin = require(&quot;html-webpack-plugin&quot;);
-const { CleanWebpackPlugin } = require(&quot;clean-webpack-plugin&quot;);
-const OptimizeCssAssetsPlugin = require(&quot;optimize-css-assets-webpack-plugin&quot;);
-const MiniCssExtractPlugin = require(&quot;mini-css-extract-plugin&quot;);
-const { HotModuleReplacementPlugin } = require('webpack');
-const TerserPlugin = require('terser-webpack-plugin');
-
-exports.getVueLoaderPlugin =  function () {
-  return new VueLoaderPlugin();
-}
-
-exports.getHtmlWebpackPlugin = function (options) {
-  return new HtmlWebpackPlugin(Object.assign({}, options));
-}
-
-exports.getCleanWebpackPlugin = function (options) {
-  return new CleanWebpackPlugin(Object.assign({}, options));
-}
-exports.getStylePlugin = function (options) {
-  return new OptimizeCssAssetsPlugin(
-    Object.assign(
-      {
-        assetNameRegExp: /\.optimize\.css$/g,
-        cssProcessor: require(&quot;cssnano&quot;),
-        cssProcessorPluginOptions: {
-          preset: [&quot;default&quot;, { discardComments: { removeAll: true } }],
-        },
-        canPrint: true,
-      },
-      options
-    )
-  );
-}
-exports.getMiniCssExtractPlugin = function (options) {
-  return new MiniCssExtractPlugin(Object.assign({
-    filename: 'assets/style/[name].[contenthash].css',
-  }, options));
-}
-exports.getHotModuleReplacementPlugin = function () {
-  return new HotModuleReplacementPlugin();
-}
-exports.getTerserPlugin = function (options) {
-  return new TerserPlugin(
-      Object.assign({
-        cache: true, // 使用 cache，加快二次构建速度
-        parallel: true, // 开启多线程
-        extractComments: true,
-        terserOptions: {
-          compress: {
-            unused: true,
-            drop_debugger: true,
-            drop_console: true,
-            dead_code: true,
-          },
-        },
-      },options)
-  );
-}
-
-</code></pre>
-</li>
-<li>
-<p>工具函数</p>
-<pre><code class="language-javascript">// ./scripts/config/util.js
-const path = require('path')
-
-exports.reslove = function  (url){
-    return path.resolve(__dirname,`../../${url}`)
-}
-</code></pre>
-</li>
-</ul>
+</ol>
+<h2 id="3-cors">3. CORS</h2>
+<p>Cross-Origin Resource Sharing,跨域资源共享,是W3C推荐使用的一种跨域的访问验证机制,它由一系列传输的HTTP头组成,这些HTTP头决定浏览器是否阻止前端JavaScript代码获取跨域请求的响应.</p>
+<p>这种机制让Web应用服务器能支持跨站访问控制,使跨站数据传输更加安全,减轻跨域HTTP请求的风险.CORS验证机制需要客户端和服务端协同处理.</p>
+<h2 id="4同源策略">4.同源策略</h2>
+<p>出于安全考虑(CSRF(Cross-site request forgery)跨站请求伪造),浏览器限制<strong>从脚本中发起的跨域HTTP请求</strong>.默认的安全限制为同源策略,即JavaScript或Cookie只能访问同域下的内容.例如:XMLHttpRequest和Fetch遵循同源策略.因此,使用XMLHttpRequest 和Fetch API的Web应用程序只能将HTTP请求发送到其自己的域.</p>
+<h2 id="5-同源">5. 同源</h2>
+<p>如果两个URL的协议protocol、端口prot、域名host都相同的话，则这两个URL是同源的。<br>
+⚠️ Internet Explorer 的同源策略没有将端口号纳入到同源策略的检查中。</p>
 
             </div>
             
@@ -1377,7 +607,7 @@ exports.reslove = function  (url){
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="https://exclison.github.io/post/webpack-shi-yong/" title="Webpack使用">https://exclison.github.io/post/webpack-shi-yong/</a>
+      <a href="https://exclison.github.io/post/guan-yu-liu-lan-qi-de-yu-jian-optionqing-qiu/" title="关于浏览器的预检(OPTION)请求">https://exclison.github.io/post/guan-yu-liu-lan-qi-de-yu-jian-optionqing-qiu/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -1390,15 +620,11 @@ exports.reslove = function  (url){
   <div class="nav">
     <div class="nav-prev">
       
-        <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="Webpack配置详解" href="https://exclison.github.io/post/webpack-pei-zhi-xiang-jie/">Webpack配置详解</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="Webpack配置详解" href="https://exclison.github.io/post/webpack-pei-zhi-xiang-jie/">上一篇</a>
-      
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="es6扩展运算符" href="https://exclison.github.io/post/es6-kuo-zhan-yun-suan-fu/">es6扩展运算符</a>
-        <a class="nav-mobile-next" title="es6扩展运算符" href="https://exclison.github.io/post/es6-kuo-zhan-yun-suan-fu/">下一篇</a>
+        <a class="nav-pc-next" title="Echarts中国地图使用记录" href="https://exclison.github.io/post/echarts-zhong-guo-di-tu-shi-yong-ji-lu/">Echarts中国地图使用记录</a>
+        <a class="nav-mobile-next" title="Echarts中国地图使用记录" href="https://exclison.github.io/post/echarts-zhong-guo-di-tu-shi-yong-ji-lu/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>

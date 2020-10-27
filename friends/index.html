@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#495057">
 <title>Exclison</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1603433020515">
+<link rel="shortcut icon" href="/favicon.ico?v=1603779697241">
 <link rel="stylesheet" href="/media/css/mist.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -196,7 +196,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">7</span>
+        <span class="site-item-stat-count">8</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -473,6 +473,59 @@
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://exclison.github.io/post/guan-yu-liu-lan-qi-de-yu-jian-optionqing-qiu/"" data-c="
+          &lt;h2 id=&#34;关于浏览器的预检option请求&#34;&gt;关于浏览器的预检(OPTION)请求&lt;/h2&gt;
+&lt;p&gt;OPTION请求没有附带请求数据,响应体也为空&lt;/p&gt;
+&lt;h3 id=&#34;1-option预检请求的作用&#34;&gt;1. OPTION预检请求的作用&lt;/h3&gt;
+&lt;p&gt;OPTION请求用于获取目的资源所支持的通信选项&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;检测服务器所支持的请求方法&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;CORS中的预检请求&lt;/p&gt;
+&lt;p&gt;CORS规范要求,对那些可能对服务器数据产生副作用的HTTP请求方法(特别是GET以外的HTTP请求,或者搭配某些MIME类型的POST请求),浏览器必须首先使用OPTIONS方法发起一个预检请求(preflight request),从而获知服务端是否允许该跨域请求.服务器确认允许之后,才发起实际的HTTP请求.在预检请求的返回中,服务端也可以通知客户端,是否需要携带身份凭证(包括Cookies和HTTP认证相关数据)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-什么场景会出发cors的预检请求&#34;&gt;2. 什么场景会出发CORS的预检请求&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;在CORS机制中,客户端(浏览器)将请求分为两种:&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;简单请求(需同时满足以下条件)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;请求方法是以下三种之一:GET,HEAD,POST&lt;/li&gt;
+&lt;li&gt;HTTP的头信息不超出以下几种字段:Accept,Accept-Language,Content-Language,Last-Event-ID,Content-Type&lt;/li&gt;
+&lt;li&gt;Content-Type的值仅限以下三种:text\plain,multipart/form-data,application/x-www-form-urlencoded&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;非简单请求(但凡不同时满足上面两个条件,就属于非简单请求)&lt;/p&gt;
+&lt;p&gt;会触发浏览器发生预检请求,这是浏览器行为.“预检请求“的使用,可以避免跨域请求对服务器的用户数据产生未预期到影响.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;axios.get(&#39;/api/user&#39;,{headers:{&#39;token&#39;:&#39;thisisatoken&#39;}})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;上述代码中添加了token 是一个复杂请求,会触发浏览器的预检请求,可以在服务端解决&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;res.writeHead(200,{
+  &amp;quot;Access-Control-Allow-Origin&amp;quot;:&amp;quot;http://localhost:3000&amp;quot;,//解决跨域问题,放开请求的网站
+  &amp;quot;Access-Control-Allow-Headers&amp;quot;:&amp;quot;token,Content-Type&amp;quot;,//解决预检请求问题
+  &amp;quot;Access-Control-Allow-Headers&amp;quot;:&amp;quot;PUT&amp;quot;,//放开PUT请求
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果类似浏览器这种，包含 CORS 机制的客户端发送的请求，每次都要经过一个复杂逻辑才能知道自己是否跨域，服务器的压力和用户体验是不理想的，那么预检请求就孕育而生：发送实际请求前，先发送预检请求询问服务器是否允许跨域，不允许就不发送实际请求，服务器只需要对预检请求进行跨域处理。&lt;br&gt;
+这样来看，在 CORS 机制中，发送预检请求是一种保护机制，保护资源不被未授权的请求修改。和授权服务很像，预检请求通过了，浏览器后续对同一服务的请求，不需要做跨域询问，服务端不想支持跨域访问，啥也不用做。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;3-cors&#34;&gt;3. CORS&lt;/h2&gt;
+&lt;p&gt;Cross-Origin Resource Sharing,跨域资源共享,是W3C推荐使用的一种跨域的访问验证机制,它由一系列传输的HTTP头组成,这些HTTP头决定浏览器是否阻止前端JavaScript代码获取跨域请求的响应.&lt;/p&gt;
+&lt;p&gt;这种机制让Web应用服务器能支持跨站访问控制,使跨站数据传输更加安全,减轻跨域HTTP请求的风险.CORS验证机制需要客户端和服务端协同处理.&lt;/p&gt;
+&lt;h2 id=&#34;4同源策略&#34;&gt;4.同源策略&lt;/h2&gt;
+&lt;p&gt;出于安全考虑(CSRF(Cross-site request forgery)跨站请求伪造),浏览器限制&lt;strong&gt;从脚本中发起的跨域HTTP请求&lt;/strong&gt;.默认的安全限制为同源策略,即JavaScript或Cookie只能访问同域下的内容.例如:XMLHttpRequest和Fetch遵循同源策略.因此,使用XMLHttpRequest 和Fetch API的Web应用程序只能将HTTP请求发送到其自己的域.&lt;/p&gt;
+&lt;h2 id=&#34;5-同源&#34;&gt;5. 同源&lt;/h2&gt;
+&lt;p&gt;如果两个URL的协议protocol、端口prot、域名host都相同的话，则这两个URL是同源的。&lt;br&gt;
+⚠️ Internet Explorer 的同源策略没有将端口号纳入到同源策略的检查中。&lt;/p&gt;
+">关于浏览器的预检(OPTION)请求</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://exclison.github.io/post/echarts-zhong-guo-di-tu-shi-yong-ji-lu/"" data-c="
