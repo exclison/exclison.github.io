@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#495057">
 <title>关于 | Exclison</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1604559375749">
+<link rel="shortcut icon" href="/favicon.ico?v=1605779221825">
 <link rel="stylesheet" href="/media/css/mist.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -214,7 +214,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">9</span>
+        <span class="site-item-stat-count">10</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -1009,6 +1009,155 @@
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://exclison.github.io/post/guan-yu-xlsxjs-de-shi-yong-ji-lu/"" data-c="
+          &lt;h1 id=&#34;关于xlsxjs使用记录&#34;&gt;关于XLSXJS使用记录&lt;/h1&gt;
+&lt;h2 id=&#34;使用xlsxjs-vue-iview实现上传表格&#34;&gt;使用xlsx.js + vue + iview实现上传表格&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;先使用upload组件实现上传文件,可用其他方式替代&lt;/li&gt;
+&lt;li&gt;拿到文件流之后就可以用FileReader读取文件了&lt;/li&gt;
+&lt;li&gt;读取文件之后使用xlsx将数据读取为binary格式&lt;/li&gt;
+&lt;li&gt;将文件使用xlsx.utils.sheet_to_json读取为json格式&lt;/li&gt;
+&lt;li&gt;然后就可以根据自己需要解析数据了&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;上代码&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// 处理文件上传
+    handleUpload(file) { //这里为vue上传文件时拿到文件流的回调函数
+      if (!this.validateFormat(file.name)) return false // 验证格式
+
+      // 初始化状态
+      this.loadingStatus = true
+      this.$emit(&#39;startImport&#39;)
+
+      var reader = new FileReader() //创建FileReader实例
+
+      const $t = this //映射this
+
+      reader.onload = function(e) {
+        var data = e.target.result
+
+        //使用xlsx读取文件
+        if ($t.RAS) {
+          $t.wb = XLSX.read(data, {
+            type: &#39;binary&#39;,
+          })
+        } else {
+          $t.wb = XLSX.read($t.fixdata(data), {
+            type: &#39;binary&#39;,
+          })
+        }
+
+        // 读取每个sheet的数据
+        const jsons = []
+        for (const sheetName of $t.wb.SheetNames) {
+          //解析成json数据
+          // const json = XLSX.utils.sheet_to_json($t.wb.Sheets[sheetName])
+          const json = XLSX.utils.sheet_to_json($t.wb.Sheets[sheetName], {
+            header: &#39;A&#39;,
+            raw:true
+          })
+          jsons.push(json)
+        }
+
+        
+
+        // 处理读取后的json数据
+        const objData = $t.analyzeData(jsons)
+
+        // 结束状态
+        $t.loadingStatus = false
+
+        $t.$emit(&#39;finishImport&#39;, objData)
+      }
+      //读取文件
+      if (this.RAS) reader.readAsBinaryString(file)
+      else reader.readAsArrayBuffer(file)
+
+      return false
+    },
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;关于xlsxutilssheet_to_json的参数&#34;&gt;关于xlsx.utils.sheet_to_json的参数&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;    /** Converts a worksheet object to an array of JSON objects */
+    sheet_to_json&amp;lt;T&amp;gt;(worksheet: WorkSheet, opts?: Sheet2JSONOpts): T[];
+    sheet_to_json(worksheet: WorkSheet, opts?: Sheet2JSONOpts): any[][];
+    sheet_to_json(worksheet: WorkSheet, opts?: Sheet2JSONOpts): any[];
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;第一个参数为需要解析的表格sheet数据&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;第二个参数为各种选项,是一个对象&lt;/p&gt;
+&lt;p&gt;若没有第二个参数,并且表格中没有合并单元格&lt;/p&gt;
+&lt;p&gt;获取的数据将是这样的&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;[
+  [
+    {
+      表头1: &amp;quot;值1&amp;quot;
+			表头2: &amp;quot;值2&amp;quot;
+			表头3: &amp;quot;值3&amp;quot;
+			表头4: &amp;quot;值4&amp;quot;
+			表头5: &amp;quot;值5&amp;quot;
+    },
+    {
+      表头1: &amp;quot;值1&amp;quot;
+			表头2: &amp;quot;值2&amp;quot;
+			表头3: &amp;quot;值3&amp;quot;
+			表头4: &amp;quot;值4&amp;quot;
+			表头5: &amp;quot;值5&amp;quot;
+    },
+  ]
+]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;header&lt;/p&gt;
+&lt;p&gt;该参数可以设置表头,类型可以是数字,字符串,数组&lt;/p&gt;
+&lt;p&gt;目前只知道可以传 1、&#39;A&#39;、[...]&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const json = XLSX.utils.sheet_to_json($t.wb.Sheets[sheetName], {header: &#39;A&#39;})
+
+//json数据将是这样的 有合并单元格将会不同,自己合理调整就可以
+[
+  [
+    {
+      A: &amp;quot;表头1&amp;quot;
+			B: &amp;quot;表头1&amp;quot;
+			C: &amp;quot;表头1&amp;quot;
+			D: &amp;quot;表头1&amp;quot;
+			E: &amp;quot;表头1&amp;quot;
+			F: &amp;quot;表头1&amp;quot;
+    },
+    {
+      A: &amp;quot;值1&amp;quot;
+			B: &amp;quot;值1&amp;quot;
+			C: &amp;quot;值1&amp;quot;
+			D: &amp;quot;值1&amp;quot;
+			E: &amp;quot;值1&amp;quot;
+			F: &amp;quot;值1&amp;quot;
+    }
+  ]
+]
+
+
+const json = XLSX.utils.sheet_to_json($t.wb.Sheets[sheetName], {header: 1})
+
+const json = XLSX.utils.sheet_to_json($t.wb.Sheets[sheetName], {header: [&#39;num&#39;, &#39;name&#39;, &#39;tel&#39;, &#39;address&#39;],})
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;raw&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Range&lt;/p&gt;
+&lt;p&gt;range指的是解析范围,并没有深入研究&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+"> 关于XLSX.JS的使用记录</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://exclison.github.io/post/node-shu-ju-chi-jiu-hua-mysql/"" data-c="

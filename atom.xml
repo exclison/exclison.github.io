@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://exclison.github.io</id>
     <title>Exclison</title>
-    <updated>2020-11-05T06:56:24.503Z</updated>
+    <updated>2020-11-19T09:47:08.419Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://exclison.github.io"/>
     <link rel="self" href="https://exclison.github.io/atom.xml"/>
@@ -10,6 +10,13 @@
     <logo>https://exclison.github.io/images/avatar.png</logo>
     <icon>https://exclison.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Exclison</rights>
+    <entry>
+        <title type="html"><![CDATA[ 关于XLSX.JS的使用记录]]></title>
+        <id>https://exclison.github.io/post/guan-yu-xlsxjs-de-shi-yong-ji-lu/</id>
+        <link href="https://exclison.github.io/post/guan-yu-xlsxjs-de-shi-yong-ji-lu/">
+        </link>
+        <updated>2020-11-19T09:46:30.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[node 数据持久化-MySQL]]></title>
         <id>https://exclison.github.io/post/node-shu-ju-chi-jiu-hua-mysql/</id>
