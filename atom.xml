@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://exclison.github.io</id>
     <title>Exclison</title>
-    <updated>2020-11-19T09:50:04.459Z</updated>
+    <updated>2020-11-20T08:14:17.635Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://exclison.github.io"/>
     <link rel="self" href="https://exclison.github.io/atom.xml"/>
@@ -10,6 +10,13 @@
     <logo>https://exclison.github.io/images/avatar.png</logo>
     <icon>https://exclison.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Exclison</rights>
+    <entry>
+        <title type="html"><![CDATA[JS数组根据字段分组排列]]></title>
+        <id>https://exclison.github.io/post/js-shu-zu-gen-ju-zi-duan-fen-zu-pai-lie/</id>
+        <link href="https://exclison.github.io/post/js-shu-zu-gen-ju-zi-duan-fen-zu-pai-lie/">
+        </link>
+        <updated>2020-11-20T08:14:03.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[ 关于XLSX.JS的使用记录]]></title>
         <id>https://exclison.github.io/post/guan-yu-xlsxjs-de-shi-yong-ji-lu/</id>
@@ -72,18 +79,5 @@
         <link href="https://exclison.github.io/post/es6-kuo-zhan-yun-suan-fu/">
         </link>
         <updated>2020-09-19T02:29:42.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://exclison.github.io/post/hello-gridea/</id>
-        <link href="https://exclison.github.io/post/hello-gridea/">
-        </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-]]></content>
     </entry>
 </feed>

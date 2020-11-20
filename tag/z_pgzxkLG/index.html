@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#495057">
 <title>Exclison</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1605779400566">
+<link rel="shortcut icon" href="/favicon.ico?v=1605860053698">
 <link rel="stylesheet" href="/media/css/mist.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -196,7 +196,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">10</span>
+        <span class="site-item-stat-count">11</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -245,6 +245,8 @@
           <small class="language" data-lan="tag">标签</small>
         </h2>
       </div>
+      
+      
       
       
       
@@ -498,6 +500,94 @@
     <div class="result" id="result">
       
       <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://exclison.github.io/post/js-shu-zu-gen-ju-zi-duan-fen-zu-pai-lie/"" data-c="
+          &lt;h1 id=&#34;js数组根据字段分组排列&#34;&gt;JS数组根据字段分组排列&lt;/h1&gt;
+&lt;p&gt;记录一下项目中用到的技术,不多说,直接上代码&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;/*
+     *@name:编排数据
+     *@description:对数据根据相应字段分组排列
+     *@author: hanyuchen
+     *@date: 2020-11-20 14:58:47
+     *@params {array} data: 需要分组的数组
+     *@params {string} key: 分组根据的字段
+    */
+    const orchesData = (data,key)=&amp;gt;{
+
+       const groupBy = (list,fn)=&amp;gt;{
+         const groups = {}
+         list.forEach(i=&amp;gt;{
+          const groupName = fn(i)
+          groups[groupName] = groups[groupName] || []
+          groups[groupName].push(i)
+         })
+
+         const groupList = Object.keys(groups).reduce((a,c)=&amp;gt;{
+           return a.concat(groups[c])
+         },[])
+         return groupList
+       }
+       const sortList = groupBy(data,(item)=&amp;gt;{
+         return item[key]
+       })
+       return sortList
+    },
+    
+   const list = [
+        {&amp;quot;name&amp;quot;: &amp;quot;John&amp;quot;, &amp;quot;Average&amp;quot;: 15, &amp;quot;High&amp;quot;: 10, &amp;quot;DtmStamp&amp;quot;: 1358226000000},
+        {&amp;quot;name&amp;quot;: &amp;quot;Jane&amp;quot;, &amp;quot;Average&amp;quot;: 16, &amp;quot;High&amp;quot;: 92, &amp;quot;DtmStamp&amp;quot;: 1358226000000},
+        {&amp;quot;name&amp;quot;: &amp;quot;Jane&amp;quot;, &amp;quot;Average&amp;quot;: 17, &amp;quot;High&amp;quot;: 45, &amp;quot;DtmStamp&amp;quot;: 1358226000000},
+        {&amp;quot;name&amp;quot;: &amp;quot;John&amp;quot;, &amp;quot;Average&amp;quot;: 18, &amp;quot;High&amp;quot;: 87, &amp;quot;DtmStamp&amp;quot;: 1358226000000},
+        {&amp;quot;name&amp;quot;: &amp;quot;Jane&amp;quot;, &amp;quot;Average&amp;quot;: 15, &amp;quot;High&amp;quot;: 10, &amp;quot;DtmStamp&amp;quot;: 1358226060000},
+        {&amp;quot;name&amp;quot;: &amp;quot;John&amp;quot;, &amp;quot;Average&amp;quot;: 16, &amp;quot;High&amp;quot;: 87, &amp;quot;DtmStamp&amp;quot;: 1358226060000},
+        {&amp;quot;name&amp;quot;: &amp;quot;John&amp;quot;, &amp;quot;Average&amp;quot;: 17, &amp;quot;High&amp;quot;: 45, &amp;quot;DtmStamp&amp;quot;: 1358226060000},
+        {&amp;quot;name&amp;quot;: &amp;quot;Jane&amp;quot;, &amp;quot;Average&amp;quot;: 18, &amp;quot;High&amp;quot;: 92, &amp;quot;DtmStamp&amp;quot;: 1358226060000}
+        ]
+   const groupList = orchesData(list,&#39;name&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;简单分享一下思路&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;先定义一个groupBy函数,包含两个参数,一个是需要分组的数组,一个是回调函数&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;回调函数用来返回数组单个项目的对应key的值,也就是list中的每一项的name值,要用它来做组名&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;groupBy里边首先定义一个对象(咱们利用对象属性的唯一性来实现分组)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;然后对list数据进行遍历,取出每条数据的组名(也就是例子中的name对应的值)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将组名定义为对象groups的属性并对其赋值(由于对象属性的唯一性,所以每次赋值都是对上次赋值的覆盖),为了避免这个问题,我们先将上一次的数据赋值过来,如果没有就赋值为空数组&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;然后将这条数据push到我们刚定义的数组里就好了(这样每条数据都在这个对象的相应组名下边的数组里)&lt;/p&gt;
+&lt;p&gt;得到的数据类似于这样&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+  &amp;quot;John&amp;quot;:[
+    {&amp;quot;name&amp;quot;: &amp;quot;John&amp;quot;, &amp;quot;Average&amp;quot;: 15, &amp;quot;High&amp;quot;: 10, &amp;quot;DtmStamp&amp;quot;: 1358226000000},
+    {&amp;quot;name&amp;quot;: &amp;quot;John&amp;quot;, &amp;quot;Average&amp;quot;: 18, &amp;quot;High&amp;quot;: 87, &amp;quot;DtmStamp&amp;quot;: 1358226000000},
+    {&amp;quot;name&amp;quot;: &amp;quot;John&amp;quot;, &amp;quot;Average&amp;quot;: 16, &amp;quot;High&amp;quot;: 87, &amp;quot;DtmStamp&amp;quot;: 1358226060000},
+    {&amp;quot;name&amp;quot;: &amp;quot;John&amp;quot;, &amp;quot;Average&amp;quot;: 17, &amp;quot;High&amp;quot;: 45, &amp;quot;DtmStamp&amp;quot;: 1358226060000},
+  ],
+   &amp;quot;Jane&amp;quot;:[
+     {&amp;quot;name&amp;quot;: &amp;quot;Jane&amp;quot;, &amp;quot;Average&amp;quot;: 16, &amp;quot;High&amp;quot;: 92, &amp;quot;DtmStamp&amp;quot;: 1358226000000},
+     {&amp;quot;name&amp;quot;: &amp;quot;Jane&amp;quot;, &amp;quot;Average&amp;quot;: 17, &amp;quot;High&amp;quot;: 45, &amp;quot;DtmStamp&amp;quot;: 1358226000000},
+     {&amp;quot;name&amp;quot;: &amp;quot;Jane&amp;quot;, &amp;quot;Average&amp;quot;: 15, &amp;quot;High&amp;quot;: 10, &amp;quot;DtmStamp&amp;quot;: 1358226060000},
+     {&amp;quot;name&amp;quot;: &amp;quot;Jane&amp;quot;, &amp;quot;Average&amp;quot;: 18, &amp;quot;High&amp;quot;: 92, &amp;quot;DtmStamp&amp;quot;: 1358226060000},
+   ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;最后使用array.reduce方法汇总一下就好了&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+">JS数组根据字段分组排列</a>
+      </div>
+      
+      <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://exclison.github.io/post/guan-yu-xlsxjs-de-shi-yong-ji-lu/"" data-c="
           &lt;h1 id=&#34;关于xlsxjs使用记录&#34;&gt;关于XLSXJS使用记录&lt;/h1&gt;
 &lt;h2 id=&#34;使用xlsxjs-vue-iview实现上传表格&#34;&gt;使用xlsx.js + vue + iview实现上传表格&lt;/h2&gt;
@@ -581,18 +671,18 @@
 &lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;[
   [
     {
-      表头1: &amp;quot;值1&amp;quot;,
-			表头2: &amp;quot;值2&amp;quot;,
-			表头3: &amp;quot;值3&amp;quot;,
-			表头4: &amp;quot;值4&amp;quot;,
-			表头5: &amp;quot;值5&amp;quot;,
+      &amp;quot;表头1&amp;quot;: &amp;quot;值1&amp;quot;,
+			&amp;quot;表头2&amp;quot;: &amp;quot;值2&amp;quot;,
+			&amp;quot;表头3&amp;quot;: &amp;quot;值3&amp;quot;,
+			&amp;quot;表头4&amp;quot;: &amp;quot;值4&amp;quot;,
+			&amp;quot;表头5&amp;quot;: &amp;quot;值5&amp;quot;,
     },
     {
-      表头1: &amp;quot;值1&amp;quot;,
-			表头2: &amp;quot;值2&amp;quot;,
-			表头3: &amp;quot;值3&amp;quot;,
-			表头4: &amp;quot;值4&amp;quot;,
-			表头5: &amp;quot;值5&amp;quot;,
+      &amp;quot;表头1&amp;quot;: &amp;quot;值1&amp;quot;,
+			&amp;quot;表头2&amp;quot;: &amp;quot;值2&amp;quot;,
+			&amp;quot;表头3&amp;quot;: &amp;quot;值3&amp;quot;,
+			&amp;quot;表头4&amp;quot;: &amp;quot;值4&amp;quot;,
+			&amp;quot;表头5&amp;quot;: &amp;quot;值5&amp;quot;,
     },
   ]
 ]
@@ -608,20 +698,20 @@
 [
   [
     {
-      A: &amp;quot;表头1&amp;quot;,
-			B: &amp;quot;表头1&amp;quot;,
-			C: &amp;quot;表头1&amp;quot;,
-			D: &amp;quot;表头1&amp;quot;,
-			E: &amp;quot;表头1&amp;quot;,
-			F: &amp;quot;表头1&amp;quot;,
+       &amp;quot;A&amp;quot;: &amp;quot;表头1&amp;quot;,
+		&amp;quot;B&amp;quot;: &amp;quot;表头1&amp;quot;,
+		&amp;quot;C&amp;quot;: &amp;quot;表头1&amp;quot;,
+		&amp;quot;D&amp;quot;: &amp;quot;表头1&amp;quot;,
+		&amp;quot;E&amp;quot;: &amp;quot;表头1&amp;quot;,
+		&amp;quot;F&amp;quot;: &amp;quot;表头1&amp;quot;,
     },
     {
-      A: &amp;quot;值1&amp;quot;,
-			B: &amp;quot;值1&amp;quot;,
-			C: &amp;quot;值1&amp;quot;,
-			D: &amp;quot;值1&amp;quot;,
-			E: &amp;quot;值1&amp;quot;,
-			F: &amp;quot;值1&amp;quot;,
+       &amp;quot;A&amp;quot;: &amp;quot;值1&amp;quot;,
+		&amp;quot;B&amp;quot;: &amp;quot;值1&amp;quot;,
+		&amp;quot;C&amp;quot;: &amp;quot;值1&amp;quot;,
+		&amp;quot;D&amp;quot;: &amp;quot;值1&amp;quot;,
+		&amp;quot;E&amp;quot;: &amp;quot;值1&amp;quot;,
+		&amp;quot;F&amp;quot;: &amp;quot;值1&amp;quot;,
     }
   ]
 ]
