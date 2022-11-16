@@ -8,7 +8,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <title>
         
-            blog_test
+            记录Docker+Mysql+Adminer搭建web数据库管理客户端
         
     </title>
     <link rel="shortcut icon" href="#"/>
@@ -36,7 +36,7 @@
     <div class="vertical">
         <div class="inner">
             
-                <h1 class="header-subtitle">blog_test</h1>
+                <h1 class="header-subtitle">记录Docker+Mysql+Adminer搭建web数据库管理客户端</h1>
                 <div class="header-subinfo">
                     <p class="article-info-text">
                         <span>
@@ -44,10 +44,14 @@
                         </span>
                         
                         <!-- <span>
-                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/11/16/blog-test/"></span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/11/16/记录Docker-Mysql-Adminer搭建web数据库管理客户端/"></span>
                         </span>   -->
                     </p>
                     
+                    
+                        
+                            <span class="tag-color">docker mysql</span>
+                        
                     
                 </div>
             
@@ -61,7 +65,37 @@
         <div id="article">
             <div class="toc"></div>
             <div class="article-body">
-                <h1 id="博客测试"><a href="#博客测试" class="headerlink" title="博客测试"></a>博客测试</h1>
+                <h1 id="数据持久化-MySQL"><a href="#数据持久化-MySQL" class="headerlink" title="数据持久化-MySQL"></a>数据持久化-MySQL</h1><h2 id="Adminer"><a href="#Adminer" class="headerlink" title="Adminer"></a>Adminer</h2><p>Adminer是一个类似于phpMyAdmin的MySQL管理客户端。整个程序只有一个PHP文件，易于使用和安装。Adminer支持多语言（已自 带11种翻译语言文件，可以按自己的需求翻译相应的语言）。支持PHP4.3+，MySQL 4.1+以上的版本。</p>
+<p>提供的功能包括：</p>
+<p>1：创建，修改，删除索引&#x2F;外键&#x2F;视图&#x2F;存储过程和函数。<br>2：查询，合计，排序数据。<br>3：新增&#x2F;修改&#x2F;删除记录。<br>4：支持所有数据类型，包括大字段。<br>5：能够批量执行SQL语句。<br>6：支持将数据，表结构，视图导成SQL或CSV。<br>7：能够外键关联打印数据库概要。<br>8：能够查看进程和关闭进程。<br>9：能够查看用户和权限并修改。<br>10：管理事件和表格分区（MySQL5.1才支持）</p>
+<p>类似的还有phpAdmin</p>
+<h2 id="Docker-Mysql-Adminer"><a href="#Docker-Mysql-Adminer" class="headerlink" title="Docker + Mysql + Adminer"></a>Docker + Mysql + Adminer</h2><p>创建mysql目录</p>
+<p>在mysql目录下建立docker-compose.yml文件(注意:文件名必须为docker-compose.yml)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/local/docker</span><br><span class="line"><span class="built_in">mkdir</span> mysql</span><br><span class="line">vim docker-compose.yml</span><br></pre></td></tr></table></figure>
+
+<p>将下面的配置文件拷贝到docker-compose.yml中</p>
+<p>:wq退出</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.1&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="number">123456</span></span><br><span class="line">    <span class="attr">command:</span></span><br><span class="line">      <span class="string">--default-authentication-plugin=mysql_native_password</span></span><br><span class="line">      <span class="string">--character-set-server=utf8mb4</span></span><br><span class="line">      <span class="string">--collation-server=utf8mb4_general_ci</span></span><br><span class="line">      <span class="string">--explicit_defaults_for_timestamp=true</span></span><br><span class="line">      <span class="string">--lower_case_table_names=1</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">3306</span><span class="string">:3306</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/var/lib/mysql</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">adminer:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">adminer</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">8080</span><span class="string">:8080</span></span><br></pre></td></tr></table></figure>
+
+<p>执行docker-compose.yml(-d为在后台运行)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+<p>打开</p>
+<p>Adminer数据库管理工具</p>
+<p><a target="_blank" rel="noopener" href="http://localhost:8080/">http://localhost:8080</a></p>
+<p>输入账号root,密码123456,登录进入管理界面</p>
+<h2 id="nodejs原生驱动"><a href="#nodejs原生驱动" class="headerlink" title="nodejs原生驱动"></a>nodejs原生驱动</h2><p>使用mysql2js 提供promise可以避免回调地狱</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> mysql = <span class="built_in">require</span>(<span class="string">&#x27;mysql2/promise&#x27;</span>)</span><br><span class="line">    <span class="comment">//连接设置</span></span><br><span class="line">    <span class="keyword">const</span> cfg = &#123;</span><br><span class="line">        <span class="attr">host</span>: <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">        <span class="attr">user</span>: <span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">        <span class="attr">password</span>: <span class="string">&#x27;123456&#x27;</span>,</span><br><span class="line">        <span class="attr">database</span>: <span class="string">&#x27;testnode&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> connection = <span class="keyword">await</span> mysql.<span class="title function_">createConnection</span>(cfg)<span class="comment">//创建连接</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="variable constant_">CRTATE_SQL</span> = <span class="string">`CREATE TABLE IF NOT EXISTS test (</span></span><br><span class="line"><span class="string">                        id INT NOT NULL AUTO_INCREMENT,</span></span><br><span class="line"><span class="string">                        message VARCHAR(45) NULL,</span></span><br><span class="line"><span class="string">                        PRIMARY KEY (id))`</span><span class="comment">//建立test表SQL</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> ret = <span class="keyword">await</span> connection.<span class="title function_">execute</span>(<span class="variable constant_">CRTATE_SQL</span>)<span class="comment">//只想SQL</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;create&#x27;</span>,ret)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="variable constant_">INSERT_SQL</span> = <span class="string">`INSERT INTO test(message) VALUES(?)`</span></span><br><span class="line"></span><br><span class="line">    ret = <span class="keyword">await</span> connection.<span class="title function_">execute</span>(<span class="variable constant_">INSERT_SQL</span>,[<span class="string">&#x27;ABC&#x27;</span>])<span class="comment">//插入数据</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;insert&#x27;</span>,ret)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> [rows,fields] = <span class="keyword">await</span> connection.<span class="title function_">execute</span>(<span class="string">`SELECT * FROM test`</span>)<span class="comment">//查询数据</span></span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;select:&#x27;</span>,<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(rows))</span><br><span class="line">    </span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="nodejs-ORM-Sequelize"><a href="#nodejs-ORM-Sequelize" class="headerlink" title="nodejs ORM-Sequelize"></a>nodejs ORM-Sequelize</h2><h3 id="ORM-框架"><a href="#ORM-框架" class="headerlink" title="ORM 框架"></a>ORM 框架</h3><p>对象关系映射(Object Relational Mapping,简称ORM)模式是一种为了解决面向对象与关系型数据库存在的互不匹配的现象的技术.简单的说，ORM是通过使用描述对象和数据库之间映射的元数据，将程序中的对象自动持久化到关系数据库中.</p>
+<h3 id="Sequelize"><a href="#Sequelize" class="headerlink" title="Sequelize"></a>Sequelize</h3><p>Sequelize是用于Postgres，MySQL，MariaDB，SQLite和Microsoft SQL Server的基于约定的Node.js ORM。它具有可靠的事务支持，关系，渴望和延迟加载，读取复制等功能。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">Sequelize</span> = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> sequelize = <span class="keyword">new</span> <span class="title class_">Sequelize</span>(<span class="string">&#x27;testnode&#x27;</span>,<span class="string">&#x27;root&#x27;</span>,<span class="string">&#x27;123456&#x27;</span>,&#123;</span><br><span class="line">        <span class="attr">host</span>:<span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">        <span class="attr">dialect</span>:<span class="string">&#x27;mysql&#x27;</span>,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义模型</span></span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">Fruit</span> = sequelize.<span class="title function_">define</span>(<span class="string">&#x27;Fruit&#x27;</span>,&#123;</span><br><span class="line">        <span class="attr">name</span>:&#123;<span class="attr">type</span>:<span class="title class_">Sequelize</span>.<span class="title function_">STRING</span>(<span class="number">20</span>),<span class="attr">allowNull</span>:<span class="literal">false</span>&#125;,</span><br><span class="line">        <span class="attr">price</span>:&#123;<span class="attr">type</span>:<span class="title class_">Sequelize</span>.<span class="property">FLOAT</span>,<span class="attr">allowNull</span>:<span class="literal">false</span>&#125;,</span><br><span class="line">        <span class="attr">stock</span>:&#123;<span class="attr">type</span>:<span class="title class_">Sequelize</span>.<span class="property">INTEGER</span>,<span class="attr">defaultValue</span>:<span class="number">0</span>&#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> ret = <span class="keyword">await</span> <span class="title class_">Fruit</span>.<span class="title function_">sync</span>(&#123;<span class="attr">force</span>:<span class="literal">true</span>&#125;)</span><br><span class="line"></span><br><span class="line">    ret = <span class="keyword">await</span> <span class="title class_">Fruit</span>.<span class="title function_">create</span>(&#123;</span><br><span class="line">        <span class="attr">name</span>:<span class="string">&#x27;香蕉&#x27;</span>,</span><br><span class="line">        <span class="attr">price</span>:<span class="number">3.5</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;create&#x27;</span>,ret)</span><br><span class="line"></span><br><span class="line">    ret = <span class="keyword">await</span> <span class="title class_">Fruit</span>.<span class="title function_">update</span>(&#123;</span><br><span class="line">        <span class="attr">price</span>:<span class="number">4</span></span><br><span class="line">    &#125;,&#123;</span><br><span class="line">        <span class="attr">where</span>:&#123;<span class="attr">name</span>:<span class="string">&#x27;香蕉&#x27;</span>&#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">Op</span> = <span class="title class_">Sequelize</span>.<span class="property">Op</span></span><br><span class="line">    ret = <span class="keyword">await</span> <span class="title class_">Fruit</span>.<span class="title function_">findAll</span>(&#123;</span><br><span class="line">        <span class="attr">where</span>:&#123;<span class="attr">price</span>:&#123;[<span class="title class_">Op</span>.<span class="property">lt</span>]:<span class="number">5</span>,[<span class="title class_">Op</span>.<span class="property">gt</span>]:<span class="number">2</span>&#125;&#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;select&#x27;</span>,ret)</span><br><span class="line"></span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
+
+<h3 id="UUID-主键"><a href="#UUID-主键" class="headerlink" title="UUID-主键"></a>UUID-主键</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">id</span>:&#123;</span><br><span class="line">            <span class="attr">type</span>:<span class="title class_">Sequelize</span>.<span class="property">DataTypes</span>.<span class="property">UUID</span>,</span><br><span class="line">            <span class="attr">defaultValue</span>:<span class="title class_">Sequelize</span>.<span class="property">DataTypes</span>.<span class="property">UUIDV1</span>,</span><br><span class="line">            <span class="attr">primaryKey</span>:<span class="literal">true</span></span><br><span class="line">        &#125;,</span><br></pre></td></tr></table></figure>
+
+
                 
                 <p class="end">__END__</p>
             </div>
@@ -73,7 +107,7 @@
     <div class="suffix-box-right">
         <span class="suffix-box-title">文章作者：</span>EXCLISON
         <br>
-        <span class="suffix-box-title">文章出处：</span><a href="/2022/11/16/blog-test/" target="_blank">blog_test</a>
+        <span class="suffix-box-title">文章出处：</span><a href="/2022/11/16/%E8%AE%B0%E5%BD%95Docker-Mysql-Adminer%E6%90%AD%E5%BB%BAweb%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%E5%AE%A2%E6%88%B7%E7%AB%AF/" target="_blank">记录Docker+Mysql+Adminer搭建web数据库管理客户端</a>
         <br>
         <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
         <br>
@@ -86,13 +120,20 @@
 </div>
                 
                 
+                    <div class="tag">
+                        标签：
+                        
+                            <a href="/tag/docker-mysql/">docker mysql</a>
+                        
+                    </div>
+                
                 <div class="article-prev-next">
                     
-                        <a href="/2022/11/16/xlsx-style%E4%BD%BF%E7%94%A8-%E5%AF%BC%E5%87%BA%E8%A1%A8%E6%A0%BC%E5%8F%8A%E4%BF%AE%E6%94%B9%E5%8D%95%E5%85%83%E6%A0%BC%E6%A0%B7%E5%BC%8F/" class="prev-prefix">« </a> 上一篇：    <a href="/2022/11/16/xlsx-style%E4%BD%BF%E7%94%A8-%E5%AF%BC%E5%87%BA%E8%A1%A8%E6%A0%BC%E5%8F%8A%E4%BF%AE%E6%94%B9%E5%8D%95%E5%85%83%E6%A0%BC%E6%A0%B7%E5%BC%8F/" title="发布于 2022-11-16 04:50">xlsx-style使用(导出表格及修改单元格样式)</a>
+                        <a href="/2022/11/16/%E9%80%9A%E8%BF%87Echarts%E5%BC%95%E7%94%A8%E5%9C%B0%E5%9B%BE/" class="prev-prefix">« </a> 上一篇：    <a href="/2022/11/16/%E9%80%9A%E8%BF%87Echarts%E5%BC%95%E7%94%A8%E5%9C%B0%E5%9B%BE/" title="发布于 2022-11-16 04:58">通过Echarts引用地图</a>
                         <br>
                     
                     
-                        <a href="/2022/11/16/hello-world/" class="next-prefix">» </a> 下一篇：    <a href="/2022/11/16/hello-world/" title="发布于 2022-11-16 09:25">Hello World</a>
+                        <a href="/2022/11/16/%E5%85%B3%E4%BA%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E9%A2%84%E6%A3%80-OPTION-%E8%AF%B7%E6%B1%82/" class="next-prefix">» </a> 下一篇：    <a href="/2022/11/16/%E5%85%B3%E4%BA%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E9%A2%84%E6%A3%80-OPTION-%E8%AF%B7%E6%B1%82/" title="发布于 2022-11-16 04:53">关于浏览器的预检(OPTION)请求</a>
                     
                 </div>
             </div>

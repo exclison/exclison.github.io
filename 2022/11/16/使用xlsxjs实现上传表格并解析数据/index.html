@@ -8,7 +8,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <title>
         
-            blog_test
+            使用xlsxjs实现上传表格并解析数据
         
     </title>
     <link rel="shortcut icon" href="#"/>
@@ -36,7 +36,7 @@
     <div class="vertical">
         <div class="inner">
             
-                <h1 class="header-subtitle">blog_test</h1>
+                <h1 class="header-subtitle">使用xlsxjs实现上传表格并解析数据</h1>
                 <div class="header-subinfo">
                     <p class="article-info-text">
                         <span>
@@ -44,10 +44,14 @@
                         </span>
                         
                         <!-- <span>
-                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/11/16/blog-test/"></span>
+                            <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2022/11/16/使用xlsxjs实现上传表格并解析数据/"></span>
                         </span>   -->
                     </p>
                     
+                    
+                        
+                            <span class="tag-color">xlsxjs</span>
+                        
                     
                 </div>
             
@@ -61,7 +65,41 @@
         <div id="article">
             <div class="toc"></div>
             <div class="article-body">
-                <h1 id="博客测试"><a href="#博客测试" class="headerlink" title="博客测试"></a>博客测试</h1>
+                <h1 id="关于-XLSXJS-使用记录"><a href="#关于-XLSXJS-使用记录" class="headerlink" title="关于 XLSXJS 使用记录"></a>关于 XLSXJS 使用记录</h1><h2 id="使用-xlsx-js-vue-iview-实现上传表格"><a href="#使用-xlsx-js-vue-iview-实现上传表格" class="headerlink" title="使用 xlsx.js + vue + iview 实现上传表格"></a>使用 xlsx.js + vue + iview 实现上传表格</h2><ol>
+<li>先使用 upload 组件实现上传文件,可用其他方式替代</li>
+<li>拿到文件流之后就可以用 FileReader 读取文件了</li>
+<li>读取文件之后使用 xlsx 将数据读取为 binary 格式</li>
+<li>将文件使用 xlsx.utils.sheet_to_json 读取为 json 格式</li>
+<li>然后就可以根据自己需要解析数据了</li>
+</ol>
+<p>上代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 处理文件上传</span></span><br><span class="line">    <span class="title function_">handleUpload</span>(<span class="params">file</span>) &#123; <span class="comment">//这里为vue上传文件时拿到文件流的回调函数</span></span><br><span class="line">      <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="title function_">validateFormat</span>(file.<span class="property">name</span>)) <span class="keyword">return</span> <span class="literal">false</span> <span class="comment">// 验证格式</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">// 初始化状态</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">loadingStatus</span> = <span class="literal">true</span></span><br><span class="line">      <span class="variable language_">this</span>.$emit(<span class="string">&#x27;startImport&#x27;</span>)</span><br><span class="line"></span><br><span class="line">      <span class="keyword">var</span> reader = <span class="keyword">new</span> <span class="title class_">FileReader</span>() <span class="comment">//创建FileReader实例</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> $t = <span class="variable language_">this</span> <span class="comment">//映射this</span></span><br><span class="line"></span><br><span class="line">      reader.<span class="property">onload</span> = <span class="keyword">function</span>(<span class="params">e</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> data = e.<span class="property">target</span>.<span class="property">result</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//使用xlsx读取文件</span></span><br><span class="line">        <span class="keyword">if</span> ($t.<span class="property">RAS</span>) &#123;</span><br><span class="line">          $t.<span class="property">wb</span> = <span class="variable constant_">XLSX</span>.<span class="title function_">read</span>(data, &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&#x27;binary&#x27;</span>,</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          $t.<span class="property">wb</span> = <span class="variable constant_">XLSX</span>.<span class="title function_">read</span>($t.<span class="title function_">fixdata</span>(data), &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&#x27;binary&#x27;</span>,</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 读取每个sheet的数据</span></span><br><span class="line">        <span class="keyword">const</span> jsons = []</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> sheetName <span class="keyword">of</span> $t.<span class="property">wb</span>.<span class="property">SheetNames</span>) &#123;</span><br><span class="line">          <span class="comment">//解析成json数据</span></span><br><span class="line">          <span class="comment">// const json = XLSX.utils.sheet_to_json($t.wb.Sheets[sheetName])</span></span><br><span class="line">          <span class="keyword">const</span> json = <span class="variable constant_">XLSX</span>.<span class="property">utils</span>.<span class="title function_">sheet_to_json</span>($t.<span class="property">wb</span>.<span class="property">Sheets</span>[sheetName], &#123;</span><br><span class="line">            <span class="attr">header</span>: <span class="string">&#x27;A&#x27;</span>,</span><br><span class="line">            <span class="attr">raw</span>:<span class="literal">true</span></span><br><span class="line">          &#125;)</span><br><span class="line">          jsons.<span class="title function_">push</span>(json)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 处理读取后的json数据</span></span><br><span class="line">        <span class="keyword">const</span> objData = $t.<span class="title function_">analyzeData</span>(jsons)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 结束状态</span></span><br><span class="line">        $t.<span class="property">loadingStatus</span> = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">        $t.$emit(<span class="string">&#x27;finishImport&#x27;</span>, objData)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//读取文件</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">RAS</span>) reader.<span class="title function_">readAsBinaryString</span>(file)</span><br><span class="line">      <span class="keyword">else</span> reader.<span class="title function_">readAsArrayBuffer</span>(file)</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;,</span><br></pre></td></tr></table></figure>
+
+<h2 id="关于-xlsx-utils-sheet-to-json-的参数"><a href="#关于-xlsx-utils-sheet-to-json-的参数" class="headerlink" title="关于 xlsx.utils.sheet_to_json 的参数"></a>关于 xlsx.utils.sheet_to_json 的参数</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Converts a worksheet object to an array of JSON objects */</span></span><br><span class="line">sheet_to_json&lt;T&gt;(<span class="attr">worksheet</span>: <span class="title class_">WorkSheet</span>, opts?: <span class="title class_">Sheet2JSONOpts</span>): T[];</span><br><span class="line"><span class="title function_">sheet_to_json</span>(<span class="attr">worksheet</span>: <span class="title class_">WorkSheet</span>, opts?: <span class="title class_">Sheet2JSONOpts</span>): any[][];</span><br><span class="line"><span class="title function_">sheet_to_json</span>(<span class="attr">worksheet</span>: <span class="title class_">WorkSheet</span>, opts?: <span class="title class_">Sheet2JSONOpts</span>): any[];</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>第一个参数为需要解析的表格 sheet 数据</p>
+</li>
+<li><p>第二个参数为各种选项,是一个对象</p>
+<p>若没有第二个参数,并且表格中没有合并单元格</p>
+<p>获取的数据将是这样的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  [</span><br><span class="line">    &#123;</span><br><span class="line">      表头<span class="number">1</span>: <span class="string">&quot;值1&quot;</span>,</span><br><span class="line">      表头<span class="number">2</span>: <span class="string">&quot;值2&quot;</span>,</span><br><span class="line">      表头<span class="number">3</span>: <span class="string">&quot;值3&quot;</span>,</span><br><span class="line">      表头<span class="number">4</span>: <span class="string">&quot;值4&quot;</span>,</span><br><span class="line">      表头<span class="number">5</span>: <span class="string">&quot;值5&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      表头<span class="number">1</span>: <span class="string">&quot;值1&quot;</span>,</span><br><span class="line">      表头<span class="number">2</span>: <span class="string">&quot;值2&quot;</span>,</span><br><span class="line">      表头<span class="number">3</span>: <span class="string">&quot;值3&quot;</span>,</span><br><span class="line">      表头<span class="number">4</span>: <span class="string">&quot;值4&quot;</span>,</span><br><span class="line">      表头<span class="number">5</span>: <span class="string">&quot;值5&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>header</p>
+<p>该参数可以设置表头,类型可以是数字,字符串,数组</p>
+<p>目前只知道可以传 1、’A’、[…]</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> json = <span class="variable constant_">XLSX</span>.<span class="property">utils</span>.<span class="title function_">sheet_to_json</span>($t.<span class="property">wb</span>.<span class="property">Sheets</span>[sheetName], &#123; <span class="attr">header</span>: <span class="string">&quot;A&quot;</span> &#125;)[</span><br><span class="line">  <span class="comment">//json数据将是这样的 有合并单元格将会不同,自己合理调整就可以</span></span><br><span class="line">  [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">A</span>: <span class="string">&quot;表头1&quot;</span>,</span><br><span class="line">      <span class="attr">B</span>: <span class="string">&quot;表头1&quot;</span>,</span><br><span class="line">      <span class="attr">C</span>: <span class="string">&quot;表头1&quot;</span>,</span><br><span class="line">      <span class="attr">D</span>: <span class="string">&quot;表头1&quot;</span>,</span><br><span class="line">      <span class="attr">E</span>: <span class="string">&quot;表头1&quot;</span>,</span><br><span class="line">      <span class="attr">F</span>: <span class="string">&quot;表头1&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">A</span>: <span class="string">&quot;值1&quot;</span>,</span><br><span class="line">      <span class="attr">B</span>: <span class="string">&quot;值1&quot;</span>,</span><br><span class="line">      <span class="attr">C</span>: <span class="string">&quot;值1&quot;</span>,</span><br><span class="line">      <span class="attr">D</span>: <span class="string">&quot;值1&quot;</span>,</span><br><span class="line">      <span class="attr">E</span>: <span class="string">&quot;值1&quot;</span>,</span><br><span class="line">      <span class="attr">F</span>: <span class="string">&quot;值1&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  ]</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> json = <span class="variable constant_">XLSX</span>.<span class="property">utils</span>.<span class="title function_">sheet_to_json</span>($t.<span class="property">wb</span>.<span class="property">Sheets</span>[sheetName], &#123; <span class="attr">header</span>: <span class="number">1</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> json = <span class="variable constant_">XLSX</span>.<span class="property">utils</span>.<span class="title function_">sheet_to_json</span>($t.<span class="property">wb</span>.<span class="property">Sheets</span>[sheetName], &#123;</span><br><span class="line">  <span class="attr">header</span>: [<span class="string">&quot;num&quot;</span>, <span class="string">&quot;name&quot;</span>, <span class="string">&quot;tel&quot;</span>, <span class="string">&quot;address&quot;</span>],</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>raw</p>
+</li>
+<li><p>Range</p>
+<p>range 指的是解析范围,并没有深入研究</p>
+</li>
+</ul>
+</li>
+</ol>
+
                 
                 <p class="end">__END__</p>
             </div>
@@ -73,7 +111,7 @@
     <div class="suffix-box-right">
         <span class="suffix-box-title">文章作者：</span>EXCLISON
         <br>
-        <span class="suffix-box-title">文章出处：</span><a href="/2022/11/16/blog-test/" target="_blank">blog_test</a>
+        <span class="suffix-box-title">文章出处：</span><a href="/2022/11/16/%E4%BD%BF%E7%94%A8xlsxjs%E5%AE%9E%E7%8E%B0%E4%B8%8A%E4%BC%A0%E8%A1%A8%E6%A0%BC%E5%B9%B6%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE/" target="_blank">使用xlsxjs实现上传表格并解析数据</a>
         <br>
         <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
         <br>
@@ -86,13 +124,20 @@
 </div>
                 
                 
+                    <div class="tag">
+                        标签：
+                        
+                            <a href="/tag/xlsxjs/">xlsxjs</a>
+                        
+                    </div>
+                
                 <div class="article-prev-next">
                     
-                        <a href="/2022/11/16/xlsx-style%E4%BD%BF%E7%94%A8-%E5%AF%BC%E5%87%BA%E8%A1%A8%E6%A0%BC%E5%8F%8A%E4%BF%AE%E6%94%B9%E5%8D%95%E5%85%83%E6%A0%BC%E6%A0%B7%E5%BC%8F/" class="prev-prefix">« </a> 上一篇：    <a href="/2022/11/16/xlsx-style%E4%BD%BF%E7%94%A8-%E5%AF%BC%E5%87%BA%E8%A1%A8%E6%A0%BC%E5%8F%8A%E4%BF%AE%E6%94%B9%E5%8D%95%E5%85%83%E6%A0%BC%E6%A0%B7%E5%BC%8F/" title="发布于 2022-11-16 04:50">xlsx-style使用(导出表格及修改单元格样式)</a>
+                        <a href="/2022/11/16/border-image%E7%94%A8%E6%B3%95/" class="prev-prefix">« </a> 上一篇：    <a href="/2022/11/16/border-image%E7%94%A8%E6%B3%95/" title="发布于 2022-11-16 05:11">border-image用法</a>
                         <br>
                     
                     
-                        <a href="/2022/11/16/hello-world/" class="next-prefix">» </a> 下一篇：    <a href="/2022/11/16/hello-world/" title="发布于 2022-11-16 09:25">Hello World</a>
+                        <a href="/2022/11/16/webpack%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/" class="next-prefix">» </a> 下一篇：    <a href="/2022/11/16/webpack%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/" title="发布于 2022-11-16 05:07">webpack常用配置记录</a>
                     
                 </div>
             </div>
